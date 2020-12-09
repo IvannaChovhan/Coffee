@@ -1,14 +1,48 @@
-from django.shortcuts import render
-
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
+from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth import login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate
 # Create your views here.
 from django.urls import reverse
 from .forms import *
 
 
 def index(request):
-    return render(request, 'coffee/index.html')
+    if request.user.is_authenticated:
+        return render(request, 'coffee/index.html')
+    else:
+        return HttpResponseRedirect(reverse('coffee:login'))
 
 
+def login_view(request):
+    title = 'Login'
+    error_message = ''
+    if request.method == 'POST':
+        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+        if user is not None:
+        # A backend authenticated the credentials
+            login(request, user)
+            return redirect('coffee:home')
+        else:
+            error_message = "Login or password are incorrect"
+    form = AuthenticationForm()
+    context = {
+        'title': title,
+        'form': form,
+        'error': error_message
+    }
+    return render(request, 'coffee/login.html', context)
+
+
+def logout_view(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('coffee:login')
+
+
+@login_required()
 def table_countries_page(request):
     context = {
         'title': 'Країни',
@@ -16,6 +50,7 @@ def table_countries_page(request):
     return render(request, 'coffee/tables_example.html', context)
 
 
+@login_required()
 def table_owner_page(request):
     context = {
         'title': 'Власник',
@@ -24,6 +59,7 @@ def table_owner_page(request):
     return render(request, 'coffee/tables_example.html', context)
 
 
+@login_required()
 def form_owner(request):
     error = ''
     title = 'Додати запис'

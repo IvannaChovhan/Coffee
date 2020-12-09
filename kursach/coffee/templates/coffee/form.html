@@ -1,0 +1,30 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+
+{% block title %}Hi bootstrap{% endblock title %}
+
+
+
+{% block styles %}
+
+
+{% endblock styles%}
+
+{% block heading %}{{title}} {% endblock heading %}
+
+{% block body %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+    </div>
+    <div class="card-body">
+        <form method="post" novalidate>
+          {% csrf_token %}
+          {{ form }}
+          <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+
+{% endblock body %}

@@ -5,3 +5,6 @@ from django.shortcuts import render
 
 def index(request):
     return render(request, 'coffee/index.html')
+
+def tables(request):
+    return render(request, 'coffee/tables_example.html')

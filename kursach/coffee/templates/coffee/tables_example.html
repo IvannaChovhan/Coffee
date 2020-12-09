@@ -10,7 +10,7 @@
 
 {% endblock styles%}
 
-{% block heading %}Welcome to boottsrap admin theme {% endblock heading %}
+{% block heading %}{{title}} {% endblock heading %}
 
 {% block body %}
 
@@ -24,6 +24,11 @@
         <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
     </div>
     <div class="card-body">
+        <div class="row justify-content-center">
+            <div class="col-2">
+                <a class="btn btn-block btn-primary" href={{ link_to_add_row }}>+ Додати запис</button>
+            </div>
+        </div>
         <div class="table-responsive">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>

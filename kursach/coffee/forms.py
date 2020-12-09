@@ -2,8 +2,6 @@ import django.forms as forms
 import datetime
 from .models import *
 
-from kursach.coffee.models import current_year
-
 
 class CountryForm(ModelForm):
     class Meta:
@@ -38,7 +36,7 @@ class FarmForm(ModelForm):
 class CoffeeProductForm(ModelForm):
     class Meta:
         model = CoffeeProduct
-        fields = ['coffeeType',  # 'harvestYear',
+        fields = ['coffeeType', 'harvestYear',
                   'farm', 'aroma', 'aftertaste', 'flavor', 'color']
 
 

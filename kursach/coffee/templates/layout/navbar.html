@@ -36,10 +36,14 @@
             Profile
           </a>
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
-            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-            Logout
-          </a>
+          <div class="dropdown-item justify-content-start">
+            <form action="#" method="post">
+                {% csrf_token %}
+                <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                <button type="submit" class="btn btn-light">Logout</button>
+            </form>
+          </div>
+
         </div>
       </li>
 

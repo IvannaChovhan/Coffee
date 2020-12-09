@@ -1,3 +1,4 @@
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 
 # Create your views here.
@@ -26,11 +27,14 @@ def table_owner_page(request):
 
 def form_owner(request):
     error = ''
+    message = ''
     title = 'Додати запис'
     if request.method == 'POST':
         form = OwnerForm(request.POST)
         if form.is_valid():
             form.save()
+            message = 'Запис успішно додано'
+            return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             error = "Сталася помилка"
 
@@ -40,5 +44,7 @@ def form_owner(request):
         'title': title,
         'form': form,
         'error': error,
+        'message': message,
+        'error': error
     }
     return render(request, 'coffee/form.html', context)

@@ -24,7 +24,7 @@ BUY_SELL_CHOICES = (
 
 def get_phone_regex():
     return RegexValidator(regex=r'^\+?1?\d{9,15}$',
-                          message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
+                          message="Номер телефону має бути у форматі: '+999999999'. До 15 цифр дозволено")
 
 
 # Create your models here.
@@ -36,13 +36,13 @@ class Buyer(models.Model):
     nameBuyer = models.CharField(max_length=50)
     #https://stackoverflow.com/questions/19130942/whats-the-best-way-to-store-phone-number-in-django-models
     phoneNumberBuyer = models.CharField(validators=[get_phone_regex()], max_length=17, blank=True)  # validators should be a list
-    emailBuyer = models.EmailField()
+    emailBuyer = models.EmailField(error_messages={"invalid": "Електронна адреса введена некоректно"})
 
 
 class Owner(models.Model):
     nameOwner = models.CharField(max_length=50)
     phoneNumberOwner = models.CharField(validators=[get_phone_regex()], max_length=17, blank=True)  # validators should be a list
-    emailOwner = models.EmailField()
+    emailOwner = models.EmailField(error_messages={"invalid": "Електронна адреса введена некоректно"})
 
 
 class Country(models.Model):

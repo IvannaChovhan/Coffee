@@ -20,7 +20,7 @@ def login_view(request):
     title = 'Login'
     error_message = ''
     if request.method == 'POST':
-        user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+        user = authenticate(request, username=request.POST.get('username'), password=request.POST.get('password'))
         if user is not None:
         # A backend authenticated the credentials
             login(request, user)
@@ -52,21 +52,10 @@ def table_countries_page(request):
 
 @login_required()
 def table_owner_page(request):
-    context = {
-        'title': 'Власник',
-        'link_to_add_row': reverse('coffee:form_owner')
-    }
-    return render(request, 'coffee/tables_example.html', context)
-
-
-@login_required()
-def form_owner(request):
     error = {}
     message = ''
-    title = 'Додати запис'
     if request.method == 'POST':
         form = OwnerForm(request.POST)
-        form.full_clean()
         if form.is_valid():
             form.save()
             message = 'Запис успішно додано'
@@ -80,9 +69,38 @@ def form_owner(request):
     print(error)
 
     context = {
-        'title': title,
+        'title': 'Власник',
         'form': form,
-        'errors': form.errors,
+        'errors': error,
         'message': message,
     }
-    return render(request, 'coffee/form.html', context)
+    return render(request, 'coffee/tables_example.html', context)
+
+
+# @login_required()
+# def form_owner(request):
+#     error = {}
+#     message = ''
+#     title = 'Додати запис'
+#     if request.method == 'POST':
+#         form = OwnerForm(request.POST)
+#         form.full_clean()
+#         if form.is_valid():
+#             form.save()
+#             message = 'Запис успішно додано'
+#             #return HttpResponseRedirect(reverse('coffee:form_owner'))
+#         else:
+#             for field in form.errors:
+#                 error[field] = form.errors[field].as_text()
+#
+#     form = OwnerForm()
+#
+#     print(error)
+#
+#     context = {
+#         'title': title,
+#         'form': form,
+#         'errors': form.errors,
+#         'message': message,
+#     }
+#     return render(request, 'coffee/form.html', context)

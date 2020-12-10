@@ -1,5 +1,6 @@
 {% extends 'layout/base.html' %}
 {% load static %}
+{% load crispy_forms_tags %}
 
 {% block title %}Hi bootstrap{% endblock title %}
 
@@ -20,16 +21,19 @@
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
+
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
     </div>
+
+
     <div class="card-body">
-        <div class="row justify-content-md-end">
-            <div class="col-2">
-                <a class="btn btn-block btn-primary" href={{ link_to_add_row }}>+ Додати запис</a>
-            </div>
-        </div>
-        <div class="table-responsive">
+        <form method="post">
+          {% csrf_token %}
+          {% crispy form %}
+        </form>
+
+        <div class="table-responsive mt-4">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>

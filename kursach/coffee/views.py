@@ -44,8 +44,75 @@ def logout_view(request):
 
 @login_required()
 def table_countries_page(request):
+    error = {}
+    message = ''
+    if request.method == 'POST':
+        form = CountryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = 'Added successful!'
+            # return HttpResponseRedirect(reverse('coffee:form_owner'))
+        else:
+            for field in form.errors:
+                error[field] = form.errors[field].as_text()
+
+    form = CountryForm()
+
     context = {
-        'title': 'Країни',
+        'title': 'Countries',
+        'form': form,
+        'errors': error,
+        'message': message,
+    }
+    return render(request, 'coffee/tables_example.html', context)
+
+
+@login_required()
+def table_coffeeType_page(request):
+    error = {}
+    message = ''
+    if request.method == 'POST':
+        form = CoffeeTypeForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = 'Added successful!'
+            # return HttpResponseRedirect(reverse('coffee:form_owner'))
+        else:
+            for field in form.errors:
+                error[field] = form.errors[field].as_text()
+
+    form = CoffeeTypeForm()
+
+    context = {
+        'title': 'Coffee types',
+        'form': form,
+        'errors': error,
+        'message': message,
+    }
+    return render(request, 'coffee/tables_example.html', context)
+
+
+@login_required()
+def table_buyer_page(request):
+    error = {}
+    message = ''
+    if request.method == 'POST':
+        form = BuyerForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = 'Added successful!'
+            # return HttpResponseRedirect(reverse('coffee:form_owner'))
+        else:
+            for field in form.errors:
+                error[field] = form.errors[field].as_text()
+
+    form = BuyerForm()
+
+    context = {
+        'title': 'Buyers',
+        'form': form,
+        'errors': error,
+        'message': message,
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -58,7 +125,7 @@ def table_owner_page(request):
         form = OwnerForm(request.POST)
         if form.is_valid():
             form.save()
-            message = 'Запис успішно додано'
+            message = 'Added successful!'
             #return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -66,16 +133,135 @@ def table_owner_page(request):
 
     form = OwnerForm()
 
-    print(error)
-
     context = {
-        'title': 'Власник',
+        'title': 'Farm owners',
         'form': form,
         'errors': error,
         'message': message,
     }
     return render(request, 'coffee/tables_example.html', context)
 
+
+@login_required()
+def table_farm_page(request):
+    error = {}
+    message = ''
+    if request.method == 'POST':
+        form = FarmForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = 'Added successful!'
+            #return HttpResponseRedirect(reverse('coffee:form_owner'))
+        else:
+            for field in form.errors:
+                error[field] = form.errors[field].as_text()
+
+    form = FarmForm()
+
+    context = {
+        'title': 'Farms',
+        'form': form,
+        'errors': error,
+        'message': message,
+    }
+    return render(request, 'coffee/tables_example.html', context)
+
+@login_required()
+def table_coffeeProducts_page(request):
+    error = {}
+    message = ''
+    if request.method == 'POST':
+        form = CoffeeProductForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = 'Added successful!'
+            #return HttpResponseRedirect(reverse('coffee:form_owner'))
+        else:
+            for field in form.errors:
+                error[field] = form.errors[field].as_text()
+
+    form = CoffeeProductForm()
+
+    context = {
+        'title': 'Coffee products',
+        'form': form,
+        'errors': error,
+        'message': message,
+    }
+    return render(request, 'coffee/tables_example.html', context)
+
+
+@login_required()
+def table_certificate_page(request):
+    error = {}
+    message = ''
+    if request.method == 'POST':
+        form = CertificateForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = 'Added successful!'
+            #return HttpResponseRedirect(reverse('coffee:form_owner'))
+        else:
+            for field in form.errors:
+                error[field] = form.errors[field].as_text()
+
+    form = CertificateForm()
+
+    context = {
+        'title': 'Certificates',
+        'form': form,
+        'errors': error,
+        'message': message,
+    }
+    return render(request, 'coffee/tables_example.html', context)
+
+@login_required()
+def table_order_page(request):
+    error = {}
+    message = ''
+    if request.method == 'POST':
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = 'Added successful!'
+            #return HttpResponseRedirect(reverse('coffee:form_owner'))
+        else:
+            for field in form.errors:
+                error[field] = form.errors[field].as_text()
+
+    form = OrderForm()
+
+    context = {
+        'title': 'Orders',
+        'form': form,
+        'errors': error,
+        'message': message,
+    }
+    return render(request, 'coffee/tables_example.html', context)
+
+@login_required()
+def table_payment_page(request):
+    error = {}
+    message = ''
+    if request.method == 'POST':
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            form.save()
+            message = 'Added successful!'
+            #return HttpResponseRedirect(reverse('coffee:form_owner'))
+        else:
+            for field in form.errors:
+                error[field] = form.errors[field].as_text()
+
+    form = PaymentForm()
+
+    context = {
+        'title': 'Payments',
+        'form': form,
+        'errors': error,
+        'message': message,
+    }
+    return render(request, 'coffee/tables_example.html', context)
 
 # @login_required()
 # def form_owner(request):

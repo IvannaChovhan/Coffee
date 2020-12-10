@@ -11242,3 +11242,19 @@ footer.sticky-footer .copyright {
 body.sidebar-toggled footer.sticky-footer {
   width: 100%;
 }
+
+.success_message{
+  border: 1px solid green;
+  /* display: flex; */
+  border-radius: 5px;
+  padding: 10px;
+  background: honeydew;
+}
+
+.text-area-form textarea {
+  height:100px;
+}
+
+.margin-30{
+  margin-top: 30px;
+}

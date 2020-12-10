@@ -1,5 +1,10 @@
 import django.forms as forms
 import datetime
+
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import *
+from django.forms import ModelForm
+
 from .models import *
 
 
@@ -25,6 +30,30 @@ class OwnerForm(ModelForm):
     class Meta:
         model = Owner
         fields = ['nameOwner', 'phoneNumberOwner', 'emailOwner']
+        labels = {
+            "nameOwner": "Name",
+            "phoneNumberOwner": "Phone number",
+            "emailOwner": "E-mail"
+        }
+        error_messages={
+            'null': 'null error',
+            'required': 'required error'
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(OwnerForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('nameOwner', css_class='form-group col-md-3 mb-0'),
+                Column('phoneNumberOwner', css_class='form-group col-md-3 mb-0'),
+                Column('emailOwner', css_class='form-group col-md-3 mb-0'),
+                Column(Submit('submit', 'Submit', css_class='btn btn-primary btn btn-succes mb-3 pr-4 pl-4'),
+                       css_class="form-group col-md-3 mb-0 d-flex align-items-end"),
+                css_class='form-row'
+            ),
+
+        )
 
 
 class FarmForm(ModelForm):
@@ -56,3 +85,6 @@ class PaymentForm(ModelForm):
     class Meta:
         model = Payment
         fields = ['order', 'datePayment', 'amount']
+
+
+

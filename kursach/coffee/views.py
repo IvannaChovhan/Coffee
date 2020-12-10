@@ -61,25 +61,28 @@ def table_owner_page(request):
 
 @login_required()
 def form_owner(request):
-    error = ''
+    error = {}
     message = ''
     title = 'Додати запис'
     if request.method == 'POST':
         form = OwnerForm(request.POST)
+        form.full_clean()
         if form.is_valid():
             form.save()
             message = 'Запис успішно додано'
-            return HttpResponseRedirect(reverse('coffee:form_owner'))
+            #return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
-            error = "Сталася помилка"
+            for field in form.errors:
+                error[field] = form.errors[field].as_text()
 
     form = OwnerForm()
+
+    print(error)
 
     context = {
         'title': title,
         'form': form,
-        'error': error,
+        'errors': form.errors,
         'message': message,
-        'error': error
     }
     return render(request, 'coffee/form.html', context)

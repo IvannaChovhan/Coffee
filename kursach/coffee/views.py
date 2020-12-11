@@ -7,6 +7,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate
 from django.core.paginator import Paginator
+from django.apps import apps
 # Create your views here.
 from django.urls import reverse
 from .forms import *
@@ -156,7 +157,7 @@ def table_owner_page(request):
         'message': message,
         'page_obj': page_obj,
         'fields': fields,
-        'model': Owner
+        'model': 'Owner'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -325,19 +326,11 @@ def get_objects_and_pagination(request, model, form):
 
 def delete_row(request):
     if request.method == 'DELETE':
-        model = QueryDict(request.body).get('model')
+        model = apps.get_model('coffee', QueryDict(request.body).get('model'))
         row = model.objects.get(pk=int(QueryDict(request.body).get('id')))
         row.delete()
         data = {
             'deleted': True,
         }
         return JsonResponse(data)
-
-# def delete_row(request):
-#     id1 = request.GET.get('id', None)
-#     Owner.objects.get(id=id1).delete()
-#     data = {
-#         'deleted': True
-#     }
-#     return JsonResponse(data)
 

@@ -181,7 +181,7 @@
             $.ajax({
                 url : "{% url 'coffee:delete_row' %}", // the endpoint
                 type : "DELETE", // http method
-                data : { 'id' : post_primary_key}, // data sent with the delete request
+                data : { 'id' : post_primary_key, 'model' : "{{ model }}"}, // data sent with the delete request
                 dataType: 'json',
                 mode: 'same-origin',
                 beforeSend: function (xhr) {
@@ -189,8 +189,8 @@
                     xhr.setRequestHeader('X-CSRFToken', csrftoken);
                 },
                 success : function() {
-                        $('#row-' + post_primary_key).remove(); // hide the post on success
-                        console.log("Row deletion successful");
+                      $('#row-' + post_primary_key).remove(); // hide the post on success
+                      console.log("Row deletion successful");
                 },
 
                 error : function() {

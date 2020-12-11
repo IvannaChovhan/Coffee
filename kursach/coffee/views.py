@@ -69,7 +69,8 @@ def table_countries_page(request):
         'message': message,
         'page_obj': page_obj,
         'fields': fields,
-        'object_list': object_list
+        'object_list': object_list,
+        'model': 'Country'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -98,7 +99,8 @@ def table_coffeeType_page(request):
         'message': message,
         'page_obj': page_obj,
         'fields': fields,
-        'object_list': object_list
+        'object_list': object_list,
+        'model': 'CoffeeType'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -127,7 +129,8 @@ def table_buyer_page(request):
         'message': message,
         'page_obj': page_obj,
         'fields': fields,
-        'object_list': object_list
+        'object_list': object_list,
+        'model': 'Buyer'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -186,7 +189,8 @@ def table_farm_page(request):
         'message': message,
         'page_obj': page_obj,
         'fields': fields,
-        'object_list': object_list
+        'object_list': object_list,
+        'model': 'Farm'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -215,7 +219,8 @@ def table_coffeeProducts_page(request):
         'message': message,
         'page_obj': page_obj,
         'fields': fields,
-        'object_list': object_list
+        'object_list': object_list,
+        'model': 'CoffeeProduct'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -243,7 +248,8 @@ def table_certificate_page(request):
         'message': message,
         'page_obj': page_obj,
         'fields': fields,
-        'object_list': object_list
+        'object_list': object_list,
+        'model': 'Certificate'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -272,7 +278,8 @@ def table_order_page(request):
         'message': message,
         'page_obj': page_obj,
         'fields': fields,
-        'object_list': object_list
+        'object_list': object_list,
+        'model': 'Order'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -301,7 +308,8 @@ def table_payment_page(request):
         'message': message,
         'page_obj': page_obj,
         'fields': fields,
-        'object_list': object_list
+        'object_list': object_list,
+        'model': 'Payment'
     }
     return render(request, 'coffee/tables_example.html', context)
 

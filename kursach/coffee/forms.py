@@ -63,7 +63,7 @@ class BuyerForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(OwnerForm, self).__init__(*args, **kwargs)
+        super(BuyerForm, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
             Row(

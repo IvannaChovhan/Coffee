@@ -46,6 +46,7 @@
                         {% for field in fields %}
                         <th>{{ field }} </th>
                         {% endfor %}
+                        <th class="delete_th"></th>
                     </tr>
                 </thead>
                 <tfoot>
@@ -53,17 +54,22 @@
                         {% for field in fields %}
                         <th>{{ field }}</th>
                         {% endfor %}
+                        <th class="delete_th"></th>
                     </tr>
                 </tfoot>
-                <tbody>
+                <tbody id="tableObjects">
                     {% for obj in object_list %}
-                    <tr>
+                    <tr id="row-{{ obj.0 }}">
                         {% for value in obj %}
                         <td>{{ value }}</td>
                         {% endfor %}
+                        <td class="delete_button">
+                            <button class="btn btn-danger" id="delete-row-{{ obj.0 }}">-</button>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
+
             </table>
         </div>
         <ul class="pagination">
@@ -81,4 +87,6 @@
         </ul>
     </div>
 </div>
+
+
 {% endblock body %}

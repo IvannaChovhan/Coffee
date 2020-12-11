@@ -16,5 +16,6 @@ urlpatterns = [
     path('table_certificates', views.table_certificate_page, name='table_certificates'),
     path('table_orders', views.table_order_page, name='table_orders'),
     path('table_payments', views.table_payment_page, name='table_payments'),
+    path('delete_row', views.delete_row, name='delete_row')
     #path('form_owner', views.form_owner, name='form_owner'),
 ]

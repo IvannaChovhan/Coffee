@@ -37,7 +37,7 @@ class CoffeeType(models.Model):
         return u'{0}'.format(self.nameCoffeeType)
 
     def get_values(self):
-        return [self.nameCoffeeType]
+        return [self.id, self.nameCoffeeType]
 
 
 class Buyer(models.Model):
@@ -54,7 +54,7 @@ class Buyer(models.Model):
         return u'{0}'.format(self.nameBuyer)
 
     def get_values(self):
-        return [self.nameBuyer, self.phoneNumberBuyer, self.emailBuyer]
+        return [self.id, self.nameBuyer, self.phoneNumberBuyer, self.emailBuyer]
 
 
 class Owner(models.Model):
@@ -70,7 +70,7 @@ class Owner(models.Model):
         return u'{0}'.format(self.nameOwner)
 
     def get_values(self):
-        return [self.nameOwner, self.phoneNumberOwner, self.emailOwner]
+        return [self.id, self.nameOwner, self.phoneNumberOwner, self.emailOwner]
 
 
 class Country(models.Model):
@@ -82,7 +82,7 @@ class Country(models.Model):
         return u'{0}'.format(self.nameCountry)
 
     def get_values(self):
-        return [self.nameCountry]
+        return [self.id, self.nameCountry]
 
 
 class Farm(models.Model):
@@ -95,7 +95,7 @@ class Farm(models.Model):
         return u'{0} ({1})'.format(self.nameFarm, self.countryFarm)
 
     def get_values(self):
-        return [self.nameFarm, self.ownerFarm, self.countryFarm]
+        return [self.id, self.nameFarm, self.ownerFarm, self.countryFarm]
 
 
 class CoffeeProduct(models.Model):
@@ -126,7 +126,7 @@ class CoffeeProduct(models.Model):
         return u'{0}'.format(self.id)
 
     def get_values(self):
-        return [self.coffeeType, self.harvestYear, self.farm, self.aroma, self.aftertaste, self.flavor, self.color]
+        return [self.id, self.coffeeType, self.harvestYear, self.farm, self.aroma, self.aftertaste, self.flavor, self.color]
 
 
 class Certificate(models.Model):
@@ -140,7 +140,7 @@ class Certificate(models.Model):
                                                                      "required": "Disadvantages field is required"})
 
     def get_values(self):
-        return [self.body, self.product, self.dateOfExpire, self.disadvantages]
+        return [self.id, self.body, self.product, self.dateOfExpire, self.disadvantages]
 
 
 class Order(models.Model):
@@ -163,7 +163,7 @@ class Order(models.Model):
         return u'{0}'.format(self.id)
 
     def get_values(self):
-        return [self.coffeeProduct, self.weight, self.price, self.dateOrder, self.buyer, self.purchase]
+        return [self.id, self.coffeeProduct, self.weight, self.price, self.dateOrder, self.buyer, self.purchase]
 
 
 class Payment(models.Model):
@@ -175,4 +175,4 @@ class Payment(models.Model):
                                      "required": "Amount is required"})
 
     def get_values(self):
-        return [self.order, self.datePayment, self.amount]
+        return [self.id, self.order, self.datePayment, self.amount]

@@ -1,4 +1,6 @@
-from django.http import HttpResponseRedirect
+import json
+
+from django.http import HttpResponseRedirect, QueryDict, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import login, logout
@@ -153,7 +155,8 @@ def table_owner_page(request):
         'errors': error,
         'message': message,
         'page_obj': page_obj,
-        'fields': fields
+        'fields': fields,
+        'model': Owner
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -304,48 +307,37 @@ def table_payment_page(request):
 
 def get_objects_and_pagination(request, model, form):
     """
-
     :param request: 
     :param model: like Owner or Farm
     :param form: form of its model
     :return: 
     """""
-    fields = []
+    fields = ['Id']
     for field in form:
         fields.append(str(field.label))
     model_list = model.objects.get_queryset().order_by('id').reverse()
     paginator = Paginator(model_list, 10)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
-    for obj in page_obj.object_list:
-        print(obj)
     object_list = [obj.get_values() for obj in page_obj.object_list]
     return fields, page_obj, object_list
 
-# @login_required()
-# def form_owner(request):
-#     error = {}
-#     message = ''
-#     title = 'Додати запис'
-#     if request.method == 'POST':
-#         form = OwnerForm(request.POST)
-#         form.full_clean()
-#         if form.is_valid():
-#             form.save()
-#             message = 'Запис успішно додано'
-#             #return HttpResponseRedirect(reverse('coffee:form_owner'))
-#         else:
-#             for field in form.errors:
-#                 error[field] = form.errors[field].as_text()
-#
-#     form = OwnerForm()
-#
-#     print(error)
-#
-#     context = {
-#         'title': title,
-#         'form': form,
-#         'errors': form.errors,
-#         'message': message,
+
+def delete_row(request):
+    if request.method == 'DELETE':
+        model = QueryDict(request.body).get('model')
+        row = model.objects.get(pk=int(QueryDict(request.body).get('id')))
+        row.delete()
+        data = {
+            'deleted': True,
+        }
+        return JsonResponse(data)
+
+# def delete_row(request):
+#     id1 = request.GET.get('id', None)
+#     Owner.objects.get(id=id1).delete()
+#     data = {
+#         'deleted': True
 #     }
-#     return render(request, 'coffee/form.html', context)
+#     return JsonResponse(data)
+

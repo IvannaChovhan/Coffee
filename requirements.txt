@@ -1,3 +1,4 @@
+django-crispy-forms
 asgiref==3.3.1
 attrs==19.3.0
 bleach==3.1.4

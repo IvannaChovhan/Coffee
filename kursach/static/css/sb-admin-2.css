@@ -11258,3 +11258,7 @@ body.sidebar-toggled footer.sticky-footer {
 .margin-30{
   margin-top: 30px;
 }
+
+.table-responsive .delete_th{
+  border: none;
+}

@@ -37,7 +37,7 @@
           </a>
           <div class="dropdown-divider"></div>
           <div class="dropdown-item justify-content-start">
-            <form action="{% url 'coffee:login' %}" method="post">
+            <form action="{% url 'coffee:logout' %}" method="post">
                 {% csrf_token %}
                 <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                 <button type="submit" class="btn btn-light">Logout</button>

@@ -36,6 +36,9 @@ class CoffeeType(models.Model):
     def __str__(self):
         return u'{0}'.format(self.nameCoffeeType)
 
+    def get_values(self):
+        return [self.nameCoffeeType]
+
 
 class Buyer(models.Model):
     nameBuyer = models.CharField(max_length=50, error_messages={"invalid": "Name is too long. Up to 50 symbols allowed",
@@ -50,6 +53,9 @@ class Buyer(models.Model):
     def __str__(self):
         return u'{0}'.format(self.nameBuyer)
 
+    def get_values(self):
+        return [self.nameBuyer, self.phoneNumberBuyer, self.emailBuyer]
+
 
 class Owner(models.Model):
     nameOwner = models.CharField(max_length=50, error_messages={"invalid": "Name is too long. Up to 50 symbols allowed",
@@ -63,6 +69,9 @@ class Owner(models.Model):
     def __str__(self):
         return u'{0}'.format(self.nameOwner)
 
+    def get_values(self):
+        return [self.nameOwner, self.phoneNumberOwner, self.emailOwner]
+
 
 class Country(models.Model):
     nameCountry = models.CharField(max_length=50,
@@ -71,6 +80,9 @@ class Country(models.Model):
 
     def __str__(self):
         return u'{0}'.format(self.nameCountry)
+
+    def get_values(self):
+        return [self.nameCountry]
 
 
 class Farm(models.Model):
@@ -81,6 +93,9 @@ class Farm(models.Model):
 
     def __str__(self):
         return u'{0} ({1})'.format(self.nameFarm, self.countryFarm)
+
+    def get_values(self):
+        return [self.nameFarm, self.ownerFarm, self.countryFarm]
 
 
 class CoffeeProduct(models.Model):
@@ -110,6 +125,9 @@ class CoffeeProduct(models.Model):
     def __str__(self):
         return u'{0}'.format(self.id)
 
+    def get_values(self):
+        return [self.coffeeType, self.harvestYear, self.farm, self.aroma, self.aftertaste, self.flavor, self.color]
+
 
 class Certificate(models.Model):
     body = models.TextField(max_length=500, error_messages={"invalid": "Text of certificate is too long. "
@@ -120,6 +138,9 @@ class Certificate(models.Model):
     disadvantages = models.TextField(max_length=500, error_messages={"invalid": "Disadvantages field is too long. "
                                                                                 "Up to 500 symbols allowed",
                                                                      "required": "Disadvantages field is required"})
+
+    def get_values(self):
+        return [self.body, self.product, self.dateOfExpire, self.disadvantages]
 
 
 class Order(models.Model):
@@ -141,6 +162,9 @@ class Order(models.Model):
     def __str__(self):
         return u'{0}'.format(self.id)
 
+    def get_values(self):
+        return [self.coffeeProduct, self.weight, self.price, self.dateOrder, self.buyer, self.purchase]
+
 
 class Payment(models.Model):
     order = models.ForeignKey(Order, models.CASCADE)
@@ -149,3 +173,6 @@ class Payment(models.Model):
                                  error_messages={
                                      "invalid": "Amount field must be positive float. Up to 20 digits allowed",
                                      "required": "Amount is required"})
+
+    def get_values(self):
+        return [self.order, self.datePayment, self.amount]

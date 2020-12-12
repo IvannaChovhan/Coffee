@@ -52,8 +52,11 @@ def table_countries_page(request):
     if request.method == 'POST':
         form = CountryForm(request.POST)
         if form.is_valid():
-            form.save()
-            message = 'Added successful!'
+            c, created = Country.objects.get_or_create(**form.cleaned_data)
+            if created:
+                message = 'Added successful!'
+            else:
+                message = 'This row already exists'
             # return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -82,8 +85,11 @@ def table_coffeeType_page(request):
     if request.method == 'POST':
         form = CoffeeTypeForm(request.POST)
         if form.is_valid():
-            form.save()
-            message = 'Added successful!'
+            c, created = CoffeeType.objects.get_or_create(**form.cleaned_data)
+            if created:
+                message = 'Added successful!'
+            else:
+                message = 'This row already exists'
             # return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -112,8 +118,11 @@ def table_buyer_page(request):
     if request.method == 'POST':
         form = BuyerForm(request.POST)
         if form.is_valid():
-            form.save()
-            message = 'Added successful!'
+            c, created = Buyer.objects.get_or_create(**form.cleaned_data)
+            if created:
+                message = 'Added successful!'
+            else:
+                message = 'This row already exists'
             # return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -142,8 +151,11 @@ def table_owner_page(request):
     if request.method == 'POST':
         form = OwnerForm(request.POST)
         if form.is_valid():
-            form.save()
-            message = 'Added successful!'
+            c, created = Owner.objects.get_or_create(**form.cleaned_data)
+            if created:
+                message = 'Added successful!'
+            else:
+                message = 'This row already exists'
             #return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -172,8 +184,11 @@ def table_farm_page(request):
     if request.method == 'POST':
         form = FarmForm(request.POST)
         if form.is_valid():
-            form.save()
-            message = 'Added successful!'
+            c, created = Farm.objects.get_or_create(**form.cleaned_data)
+            if created:
+                message = 'Added successful!'
+            else:
+                message = 'This row already exists'
             #return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -202,8 +217,11 @@ def table_coffeeProducts_page(request):
     if request.method == 'POST':
         form = CoffeeProductForm(request.POST)
         if form.is_valid():
-            form.save()
-            message = 'Added successful!'
+            c, created = CoffeeProduct.objects.get_or_create(**form.cleaned_data)
+            if created:
+                message = 'Added successful!'
+            else:
+                message = 'This row already exists'
             #return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -232,8 +250,11 @@ def table_certificate_page(request):
     if request.method == 'POST':
         form = CertificateForm(request.POST)
         if form.is_valid():
-            form.save()
-            message = 'Added successful!'
+            c, created = Certificate.objects.get_or_create(**form.cleaned_data)
+            if created:
+                message = 'Added successful!'
+            else:
+                message = 'This row already exists'
             #return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -261,8 +282,11 @@ def table_order_page(request):
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
-            form.save()
-            message = 'Added successful!'
+            c, created = Order.objects.get_or_create(**form.cleaned_data)
+            if created:
+                message = 'Added successful!'
+            else:
+                message = 'This row already exists'
             #return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -291,8 +315,11 @@ def table_payment_page(request):
     if request.method == 'POST':
         form = PaymentForm(request.POST)
         if form.is_valid():
-            form.save()
-            message = 'Added successful!'
+            c, created = Payment.objects.get_or_create(**form.cleaned_data)
+            if created:
+                message = 'Added successful!'
+            else:
+                message = 'This row already exists'
             #return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:

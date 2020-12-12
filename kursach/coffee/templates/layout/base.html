@@ -152,57 +152,7 @@
         $('a[href="' + location.pathname + '"]').closest('li').addClass('active');
     console.log(location.pathname );
     });
-
-    function getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                // Does this cookie string begin with the name we want?
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
-    }
-    const csrftoken = getCookie('csrftoken');
-
-    $('#tableObjects').on('click', 'button[id^=delete-row-]', function(){
-        let post_primary_key = $(this).attr('id').split('-')[2];
-        console.log(post_primary_key); // sanity check
-        delete_post(post_primary_key);
-    });
-
-    function delete_post(post_primary_key){
-        if (confirm('Are you sure you want to remove this post?')===true){
-            $.ajax({
-                url : "{% url 'coffee:delete_row' %}", // the endpoint
-                type : "DELETE", // http method
-                data : { 'id' : post_primary_key, 'model' : "{{ model }}"}, // data sent with the delete request
-                dataType: 'json',
-                mode: 'same-origin',
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-                    xhr.setRequestHeader('X-CSRFToken', csrftoken);
-                },
-                success : function() {
-                      $('#row-' + post_primary_key).remove(); // hide the post on success
-                      console.log("Row deletion successful");
-                },
-
-                error : function() {
-                    console.log("Row deletion failed");
-                }
-            });
-        } else {
-            return false;
-        }
-    }
 </script>
-
 </body>
 
 </html>

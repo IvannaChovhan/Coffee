@@ -46,7 +46,7 @@
                         {% for field in fields %}
                         <th>{{ field }} </th>
                         {% endfor %}
-                        <th class="delete_th"></th>
+                        <th class="custom_th"></th>
                     </tr>
                 </thead>
                 <tfoot>
@@ -54,7 +54,7 @@
                         {% for field in fields %}
                         <th>{{ field }}</th>
                         {% endfor %}
-                        <th class="delete_th"></th>
+                        <th class="custom_th"></th>
                     </tr>
                 </tfoot>
                 <tbody id="tableObjects">
@@ -63,8 +63,9 @@
                         {% for value in obj %}
                         <td>{{ value }}</td>
                         {% endfor %}
-                        <td class="delete_th">
-                            <button class="btn btn-danger" id="delete-row-{{ obj.0 }}">-</button>
+                        <td class="custom_th">
+                            <button class="btn btn-danger" id="delete-row-{{ obj.0 }}"><i class="fas fa-fw fa-trash-alt"></i></button>
+                            <a class="btn btn-success" href="{% url "coffee:update_row" %}"><i class="fas fa-fw fa-pencil-alt"></i></a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -93,6 +94,9 @@
 
 {% block script %}
     <script>
+
+
+
         function getCookie(name) {
             let cookieValue = null;
             if (document.cookie && document.cookie !== '') {

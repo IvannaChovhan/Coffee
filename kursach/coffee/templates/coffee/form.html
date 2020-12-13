@@ -19,6 +19,12 @@
         <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
     </div>
     <div class="card-body">
+        {% if message %}
+            <div class="alert-success success_message col-md-3 mb-4">
+                <span>{{ message }}</span>
+            </div>
+
+        {% endif %}
         <form method="post">
           {% csrf_token %}
           {% crispy form %}

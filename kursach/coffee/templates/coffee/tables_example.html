@@ -65,7 +65,7 @@
                         {% endfor %}
                         <td class="custom_th">
                             <button class="btn btn-danger" id="delete-row-{{ obj.0 }}"><i class="fas fa-fw fa-trash-alt"></i></button>
-                            <a class="btn btn-success" href="{% url "coffee:update_row" %}"><i class="fas fa-fw fa-pencil-alt"></i></a>
+                            <a class="btn btn-success" href="{% url "coffee:update_row" model=model id=obj.0 %}"  ><i class="fas fa-fw fa-pencil-alt"></i></a>
                         </td>
                     </tr>
                     {% endfor %}

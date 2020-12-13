@@ -10,6 +10,7 @@ from django.core.paginator import Paginator
 from django.apps import apps
 # Create your views here.
 from django.urls import reverse
+
 from .forms import *
 
 
@@ -54,9 +55,10 @@ def table_countries_page(request):
         if form.is_valid():
             c, created = Country.objects.get_or_create(**form.cleaned_data)
             if created:
-                message = 'Added successful!'
+                request.session['message'] = 'Added successful!'
             else:
-                message = 'This row already exists'
+                request.session['message'] = 'This row already exists'
+            return HttpResponseRedirect(reverse('coffee:table_countries'))
             # return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -64,6 +66,8 @@ def table_countries_page(request):
 
     form = CountryForm()
     fields, page_obj, object_list = get_objects_and_pagination(request, Country, form)
+    if request.session.get('message'):
+        message = request.session.pop('message')
 
     context = {
         'title': 'Countries',
@@ -87,9 +91,10 @@ def table_coffeeType_page(request):
         if form.is_valid():
             c, created = CoffeeType.objects.get_or_create(**form.cleaned_data)
             if created:
-                message = 'Added successful!'
+                request.session['message'] = 'Added successful!'
             else:
-                message = 'This row already exists'
+                request.session['message'] = 'This row already exists'
+            return HttpResponseRedirect(reverse('coffee:table_coffeeTypes'))
             # return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -97,6 +102,8 @@ def table_coffeeType_page(request):
 
     form = CoffeeTypeForm()
     fields, page_obj, object_list = get_objects_and_pagination(request, CoffeeType, form)
+    if request.session.get('message'):
+        message = request.session.pop('message')
 
     context = {
         'title': 'Coffee types',
@@ -120,9 +127,10 @@ def table_buyer_page(request):
         if form.is_valid():
             c, created = Buyer.objects.get_or_create(**form.cleaned_data)
             if created:
-                message = 'Added successful!'
+                request.session['message'] = 'Added successful!'
             else:
-                message = 'This row already exists'
+                request.session['message'] = 'This row already exists'
+            return HttpResponseRedirect(reverse('coffee:table_buyers'))
             # return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -130,6 +138,8 @@ def table_buyer_page(request):
 
     form = BuyerForm()
     fields, page_obj, object_list = get_objects_and_pagination(request, Buyer, form)
+    if request.session.get('message'):
+        message = request.session.pop('message')
 
     context = {
         'title': 'Buyers',
@@ -153,17 +163,18 @@ def table_owner_page(request):
         if form.is_valid():
             c, created = Owner.objects.get_or_create(**form.cleaned_data)
             if created:
-                message = 'Added successful!'
+                request.session['message'] = 'Added successful!'
             else:
-                message = 'This row already exists'
-            #return HttpResponseRedirect(reverse('coffee:form_owner'))
+                request.session['message'] = 'This row already exists'
+            return HttpResponseRedirect(reverse('coffee:table_owners'))
         else:
             for field in form.errors:
                 error[field] = form.errors[field].as_text()
 
     form = OwnerForm()
     fields, page_obj, object_list = get_objects_and_pagination(request, Owner, form)
-
+    if request.session.get('message'):
+        message = request.session.pop('message')
     context = {
         'title': 'Farm owners',
         'object_list': object_list,
@@ -186,9 +197,10 @@ def table_farm_page(request):
         if form.is_valid():
             c, created = Farm.objects.get_or_create(**form.cleaned_data)
             if created:
-                message = 'Added successful!'
+                request.session['message'] = 'Added successful!'
             else:
-                message = 'This row already exists'
+                request.session['message'] = 'This row already exists'
+            return HttpResponseRedirect(reverse('coffee:table_farms'))
             #return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -196,6 +208,8 @@ def table_farm_page(request):
 
     form = FarmForm()
     fields, page_obj, object_list = get_objects_and_pagination(request, Farm, form)
+    if request.session.get('message'):
+        message = request.session.pop('message')
 
     context = {
         'title': 'Farms',
@@ -219,9 +233,10 @@ def table_coffeeProducts_page(request):
         if form.is_valid():
             c, created = CoffeeProduct.objects.get_or_create(**form.cleaned_data)
             if created:
-                message = 'Added successful!'
+                request.session['message'] = 'Added successful!'
             else:
-                message = 'This row already exists'
+                request.session['message'] = 'This row already exists'
+            return HttpResponseRedirect(reverse('coffee:table_coffeeProducts'))
             #return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -229,6 +244,8 @@ def table_coffeeProducts_page(request):
 
     form = CoffeeProductForm()
     fields, page_obj, object_list = get_objects_and_pagination(request, CoffeeProduct, form)
+    if request.session.get('message'):
+        message = request.session.pop('message')
 
     context = {
         'title': 'Coffee products',
@@ -252,9 +269,10 @@ def table_certificate_page(request):
         if form.is_valid():
             c, created = Certificate.objects.get_or_create(**form.cleaned_data)
             if created:
-                message = 'Added successful!'
+                request.session['message'] = 'Added successful!'
             else:
-                message = 'This row already exists'
+                request.session['message'] = 'This row already exists'
+            return HttpResponseRedirect(reverse('coffee:table_certificates'))
             #return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -262,6 +280,8 @@ def table_certificate_page(request):
 
     form = CertificateForm()
     fields, page_obj, object_list = get_objects_and_pagination(request, Certificate, form)
+    if request.session.get('message'):
+        message = request.session.pop('message')
     context = {
         'title': 'Certificates',
         'form': form,
@@ -284,9 +304,10 @@ def table_order_page(request):
         if form.is_valid():
             c, created = Order.objects.get_or_create(**form.cleaned_data)
             if created:
-                message = 'Added successful!'
+                request.session['message'] = 'Added successful!'
             else:
-                message = 'This row already exists'
+                request.session['message'] = 'This row already exists'
+            return HttpResponseRedirect(reverse('coffee:table_orders'))
             #return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -294,6 +315,8 @@ def table_order_page(request):
 
     form = OrderForm()
     fields, page_obj, object_list = get_objects_and_pagination(request, Order, form)
+    if request.session.get('message'):
+        message = request.session.pop('message')
 
     context = {
         'title': 'Orders',
@@ -317,9 +340,10 @@ def table_payment_page(request):
         if form.is_valid():
             c, created = Payment.objects.get_or_create(**form.cleaned_data)
             if created:
-                message = 'Added successful!'
+                request.session['message'] = 'Added successful!'
             else:
-                message = 'This row already exists'
+                request.session['message'] = 'This row already exists'
+            return HttpResponseRedirect(reverse('coffee:table_payments'))
             #return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
@@ -327,6 +351,8 @@ def table_payment_page(request):
 
     form = PaymentForm()
     fields, page_obj, object_list = get_objects_and_pagination(request, Payment, form)
+    if request.session.get('message'):
+        message = request.session.pop('message')
 
     context = {
         'title': 'Payments',
@@ -368,4 +394,44 @@ def delete_row(request):
             'deleted': True,
         }
         return JsonResponse(data)
+
+
+def update_row(request, model, id):
+    error = {}
+    message = ''
+    modelform = eval(model + 'Form')
+    model = apps.get_model('coffee', model)
+
+    row = model.objects.get(pk=id)
+
+    if request.method == 'POST':
+        form = modelform(request.POST)
+        if form.is_valid():
+            model.objects.filter(pk=id).update(**form.cleaned_data)
+            updated = model.objects.get(**form.cleaned_data)
+            if updated:
+                request.session['message'] = 'Updated successful!'
+            else:
+                request.session['message'] = 'This row already exists'
+        else:
+            for field in form.errors:
+                error[field] = form.errors[field].as_text()
+
+    init_dict = {}
+    form = modelform()
+    for field in form.fields:
+        init_dict[field] = row._meta.get_field(field).value_from_object(row)
+
+    if request.session.get('message'):
+        message = request.session.pop('message')
+
+    form = modelform(initial=init_dict)
+
+    context = {
+        'title': 'Payments',
+        'form': form,
+        'errors': error,
+        'message': message,
+    }
+    return render(request, 'coffee/form.html', context)
 

@@ -40,19 +40,17 @@
         <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Base tables:</h6>
-                <a class="collapse-item" href={% url 'coffee:table_countries' %}>Countries</a>
-                <a class="collapse-item" href={% url 'coffee:table_coffeeTypes' %}>Coffee types</a>
                 <a class="collapse-item" href={% url 'coffee:table_owners' %}>Farm owners</a>
                 <a class="collapse-item" href={% url 'coffee:table_buyers' %}>Buyers</a>
                 <a class="collapse-item" href={% url 'coffee:table_farms' %}>Farms</a>
                 <a class="collapse-item" href={% url 'coffee:table_coffeeProducts' %}>Coffee products</a>
-                <a class="collapse-item" href={% url 'coffee:table_certificates' %}>Certificates</a>
                 <a class="collapse-item" href={% url 'coffee:table_orders' %}>Orders</a>
                 <a class="collapse-item" href={% url 'coffee:table_payments' %}>Payments</a>
                 <div class="collapse-divider"></div>
                 <h6 class="collapse-header">Other tables:</h6>
-                <a class="collapse-item" href="404.html">404 Page</a>
-                <a class="collapse-item" href="blank.html">Blank Page</a>
+                <a class="collapse-item" href={% url 'coffee:table_countries' %}>Countries</a>
+                <a class="collapse-item" href={% url 'coffee:table_coffeeTypes' %}>Coffee types</a>
+                <a class="collapse-item" href={% url 'coffee:table_certificates' %}>Certificates</a>
             </div>
         </div>
     </li>

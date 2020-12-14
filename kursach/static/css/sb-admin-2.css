@@ -11259,15 +11259,22 @@ body.sidebar-toggled footer.sticky-footer {
   margin-top: 30px;
 }
 
-.table-responsive .custom_th{
-  border: none;
+.table-responsive .custom_th {
+      text-align: center;
+}
+
+.table-responsive .custom_th .dropdown .dropdown-toggle{
+      font-size: 20px;
+      text-align: center;
 }
 
 .table-responsive .custom_th .btn{
-      font-size: 12px;
+      font-size: 16px;
     padding: 5px 7px;
 }
-
+.table-responsive .custom_th .delete-row {
+    color: #962f2f;
+}
 .sidebar-img a, .sidebar-img a img{
   width:100%;
 }

@@ -17,6 +17,14 @@ urlpatterns = [
     path('table_orders', views.table_order_page, name='table_orders'),
     path('table_payments', views.table_payment_page, name='table_payments'),
     path('delete_row', views.delete_row, name='delete_row'),
-    path(r'<str:model>/<int:id>/update', views.update_row, name='update_row')
-    #path('form_owner', views.form_owner, name='form_owner'),
+    path(r'<str:model>/<int:id>/update', views.update_row, name='update_row'),
+    path('upload_csv_countries', views.upload_csv_countries, name='upload_csv_countries'),
+    path('upload_csv_coffeetypes', views.upload_csv_coffeetypes, name='upload_csv_coffeetypes'),
+    path('upload_csv_buyer', views.upload_csv_buyer, name='upload_csv_buyer'),
+    path('upload_csv_owner', views.upload_csv_owner, name='upload_csv_owner'),
+    path('upload_csv_farm', views.upload_csv_farm, name='upload_csv_farm'),
+    path('upload_csv_coffee_product', views.upload_csv_coffee_product, name='upload_csv_coffee_product'),
+    path('upload_csv_certificate', views.upload_csv_certificate, name='upload_csv_certificate'),
+    path('upload_csv_order', views.upload_csv_order, name='upload_csv_order'),
+    path('upload_csv_payment', views.upload_csv_payment, name='upload_csv_payment'),
 ]

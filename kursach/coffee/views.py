@@ -12,6 +12,7 @@ from django.apps import apps
 from django.urls import reverse
 
 from .forms import *
+import csv, io
 
 
 def index(request):
@@ -435,3 +436,321 @@ def update_row(request, model, id):
     }
     return render(request, 'coffee/form.html', context)
 
+
+@login_required()
+def upload_csv_countries(request):
+    template = 'coffee/upload_file.html'
+    message = ''
+    title = 'upload csv Countries'
+    if request.method == "GET":
+        context = {
+            'title': title,
+            'message': message
+        }
+        return render(request, template, context)
+
+    csv_file = request.FILES['file']
+
+    if not csv_file.name.endswith('.csv'):
+        message = "This is not csv file"
+
+    data_set = csv_file.read().decode('UTF-8')
+    io_string = io.StringIO(data_set)
+
+    next(io_string)
+    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+        _, created = Country.objects.update_or_create(
+            nameCountry=column[0]
+        )
+
+    context = {
+        'title': title,
+        'message': message
+    }
+    return render(request, template, context)
+
+
+@login_required()
+def upload_csv_coffeetypes(request):
+    template = 'coffee/upload_file.html'
+    message = ''
+    title = 'upload csv Coffee types'
+    if request.method == "GET":
+        context = {
+            'title': title,
+            'message': message
+        }
+        return render(request, template, context)
+
+    csv_file = request.FILES['file']
+
+    if not csv_file.name.endswith('.csv'):
+        message = "This is not csv file"
+
+    data_set = csv_file.read().decode('UTF-8')
+    io_string = io.StringIO(data_set)
+
+    next(io_string)
+    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+        _, created = CoffeeType.objects.update_or_create(
+            nameCoffeeType=column[0]
+        )
+
+    context = {
+        'title': title,
+        'message': message
+    }
+    return render(request, template, context)
+
+
+@login_required()
+def upload_csv_buyer(request):
+    template = 'coffee/upload_file.html'
+    message = ''
+    title = 'upload csv Buyers'
+    if request.method == "GET":
+        context = {
+            'title': title,
+            'message': message
+        }
+        return render(request, template, context)
+
+    csv_file = request.FILES['file']
+
+    if not csv_file.name.endswith('.csv'):
+        message = "This is not csv file"
+
+    data_set = csv_file.read().decode('UTF-8')
+    io_string = io.StringIO(data_set)
+
+    next(io_string)
+    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+        _, created = Buyer.objects.update_or_create(
+            nameBuyer=column[0],
+            phoneNumberBuyer=column[1],
+            emailBuyer=column[2]
+        )
+
+    context = {
+        'title': title,
+        'message': message
+    }
+    return render(request, template, context)
+
+
+@login_required()
+def upload_csv_owner(request):
+    template = 'coffee/upload_file.html'
+    message = ''
+    title = 'upload csv Owner'
+    if request.method == "GET":
+        context = {
+            'title': title,
+            'message': message
+        }
+        return render(request, template, context)
+
+    csv_file = request.FILES['file']
+
+    if not csv_file.name.endswith('.csv'):
+        message = "This is not csv file"
+
+    data_set = csv_file.read().decode('UTF-8')
+    io_string = io.StringIO(data_set)
+
+    next(io_string)
+    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+        _, created = Buyer.objects.update_or_create(
+            nameOwner=column[0],
+            phoneNumberOwner=column[1],
+            emailOwner=column[2]
+        )
+
+    context = {
+        'title': title,
+        'message': message
+    }
+    return render(request, template, context)
+
+
+@login_required()
+def upload_csv_farm(request):
+    template = 'coffee/upload_file.html'
+    message = ''
+    title = 'upload csv Farm'
+    if request.method == "GET":
+        context = {
+            'title': title,
+            'message': message
+        }
+        return render(request, template, context)
+
+    csv_file = request.FILES['file']
+
+    if not csv_file.name.endswith('.csv'):
+        message = "This is not csv file"
+
+    data_set = csv_file.read().decode('UTF-8')
+    io_string = io.StringIO(data_set)
+
+    next(io_string)
+    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+        _, created = Farm.objects.update_or_create(
+            nameFarm=column[0],
+            ownerFarm=Owner(id=column[1]),
+            countryFarm=Country(id=column[2])
+        )
+
+    context = {
+        'title': title,
+        'message': message
+    }
+    return render(request, template, context)
+
+
+@login_required()
+def upload_csv_coffee_product(request):
+    template = 'coffee/upload_file.html'
+    message = ''
+    title = 'upload csv Coffee Product'
+    if request.method == "GET":
+        context = {
+            'title': title,
+            'message': message
+        }
+        return render(request, template, context)
+
+    csv_file = request.FILES['file']
+
+    if not csv_file.name.endswith('.csv'):
+        message = "This is not csv file"
+
+    data_set = csv_file.read().decode('UTF-8')
+    io_string = io.StringIO(data_set)
+
+    next(io_string)
+    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+        _, created = CoffeeProduct.objects.update_or_create(
+            coffeeType=CoffeeType(id=column[0]),
+            harvestYear=column[1],
+            farm=Farm(id=column[2]),
+            aroma=column[3],
+            aftertaste=column[4],
+            flavor=column[5],
+            color=column[6]
+        )
+
+    context = {
+        'title': title,
+        'message': message
+    }
+    return render(request, template, context)
+
+
+@login_required()
+def upload_csv_certificate(request):
+    template = 'coffee/upload_file.html'
+    message = ''
+    title = 'upload csv Certificate'
+    if request.method == "GET":
+        context = {
+            'title': title,
+            'message': message
+        }
+        return render(request, template, context)
+
+    csv_file = request.FILES['file']
+
+    if not csv_file.name.endswith('.csv'):
+        message = "This is not csv file"
+
+    data_set = csv_file.read().decode('UTF-8')
+    io_string = io.StringIO(data_set)
+
+    next(io_string)
+    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+        _, created = Certificate.objects.update_or_create(
+            body=column[0],
+            product=CoffeeProduct(id=column[1]),
+            dateOfExpire=column[2],
+            disadvantages=column[3]
+        )
+
+    context = {
+        'title': title,
+        'message': message
+    }
+    return render(request, template, context)
+
+
+@login_required()
+def upload_csv_order(request):
+    template = 'coffee/upload_file.html'
+    message = ''
+    title = 'upload csv Order'
+    if request.method == "GET":
+        context = {
+            'title': title,
+            'message': message
+        }
+        return render(request, template, context)
+
+    csv_file = request.FILES['file']
+
+    if not csv_file.name.endswith('.csv'):
+        message = "This is not csv file"
+
+    data_set = csv_file.read().decode('UTF-8')
+    io_string = io.StringIO(data_set)
+
+    next(io_string)
+    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+        _, created = Order.objects.update_or_create(
+            coffeeProduct=CoffeeProduct(id=column[0]),
+            weight=column[1],
+            price=column[2],
+            dateOrder=column[3],
+            buyer=Buyer(id=column[4]),
+            purchase=column[5]
+        )
+
+    context = {
+        'title': title,
+        'message': message
+    }
+    return render(request, template, context)
+
+
+@login_required()
+def upload_csv_payment(request):
+    template = 'coffee/upload_file.html'
+    message = ''
+    title = 'upload csv Payment'
+    if request.method == "GET":
+        context = {
+            'title': title,
+            'message': message
+        }
+        return render(request, template, context)
+
+    csv_file = request.FILES['file']
+
+    if not csv_file.name.endswith('.csv'):
+        message = "This is not csv file"
+
+    data_set = csv_file.read().decode('UTF-8')
+    io_string = io.StringIO(data_set)
+
+    next(io_string)
+    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+        _, created = Payment.objects.update_or_create(
+            order=Order(id=column[0]),
+            datePayment=column[1],
+            amount=column[2]
+        )
+
+    context = {
+        'title': title,
+        'message': message
+    }
+    return render(request, template, context)

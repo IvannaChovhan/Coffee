@@ -11286,3 +11286,9 @@ body.sidebar-toggled footer.sticky-footer {
 .toggled .sidebar-img a {
   padding: 15px;
 }
+
+.link_back, .link_back:hover {
+    color: #858796;
+    font-size: 24px;
+    margin-bottom: 20px;
+}

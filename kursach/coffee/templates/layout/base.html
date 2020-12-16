@@ -73,8 +73,10 @@
         <div class="container-fluid">
 
           <!-- Page Heading -->
-
-            <h1 class="h3 mb-3 text-gray-800">
+            {% if prev_link %}
+          <a href="{{ prev_link }}" class="link_back"><i class="fas fa-fw fa-arrow-left"></i></a>
+            {% endif %}
+            <h1 class="h3 mb-3 mt-3 text-gray-800">
               {% block heading %}
               {% endblock heading %}
             </h1>
@@ -152,6 +154,7 @@
         $('a[href="' + location.pathname + '"]').closest('li').addClass('active');
     console.log(location.pathname );
     });
+
 </script>
 </body>
 

@@ -398,7 +398,7 @@ def get_objects_and_pagination(request, model, form):
     for field in form:
         fields.append(str(field.label))
     model_list = model.objects.get_queryset().order_by('id').reverse()
-    paginator = Paginator(model_list, 10)
+    paginator = Paginator(model_list, 50)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     object_list = [obj.get_values() for obj in page_obj.object_list]
@@ -423,12 +423,15 @@ def update_row(request, model, id):
     model = apps.get_model('coffee', model)
 
     row = model.objects.get(pk=id)
-
+    if not request.session.get('prev_link'):
+        request.session['prev_link'] = request.META.get('HTTP_REFERER')
+    prev_link = request.META.get('HTTP_REFERER')
     if request.method == 'POST':
         form = modelform(request.POST)
         if form.is_valid():
             model.objects.filter(pk=id).update(**form.cleaned_data)
             updated = model.objects.get(**form.cleaned_data)
+            prev_link = request.session.pop('prev_link')
             if updated:
                 request.session['message'] = 'Updated successful!'
             else:
@@ -448,10 +451,11 @@ def update_row(request, model, id):
     form = modelform(initial=init_dict)
 
     context = {
-        'title': 'Payments',
+        'title': 'Update table',
         'form': form,
         'errors': error,
         'message': message,
+        'prev_link': prev_link
     }
     return render(request, 'coffee/form.html', context)
 

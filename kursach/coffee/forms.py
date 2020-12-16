@@ -8,6 +8,9 @@ from django.forms import ModelForm
 from .models import *
 
 
+class DateInput(forms.DateInput):
+    input_type = 'date'
+
 class CountryForm(ModelForm):
     class Meta:
         model = Country
@@ -135,6 +138,7 @@ class CoffeeProductForm(ModelForm):
         model = CoffeeProduct
         fields = ['coffeeType', 'harvestYear',
                   'farm', 'aroma', 'aftertaste', 'flavor', 'color']
+
         labels = {
             "coffeeType": "Type of coffee",
             "harvestYear": "Harvest year",
@@ -169,6 +173,9 @@ class CertificateForm(ModelForm):
     class Meta:
         model = Certificate
         fields = ['body', 'product', 'dateOfExpire', 'disadvantages']
+        widgets = {
+            'dateOfExpire': DateInput()
+        }
         labels = {
             "body": "Text of certificate",
             "product": "For product",
@@ -196,7 +203,11 @@ class CertificateForm(ModelForm):
 class OrderForm(ModelForm):
     class Meta:
         model = Order
-        fields = ['coffeeProduct', 'weight', 'price', 'dateOrder', 'buyer', 'purchase']
+        fields = ['coffeeProduct', 'weight', 'dateOrder', 'price', 'dateOrder', 'buyer', 'purchase']
+        widgets = {
+            'dateOrder': DateInput()
+        }
+
         labels = {
             "coffeeProduct": "Coffee product",
             "weight": "Weight, kg",
@@ -229,6 +240,9 @@ class PaymentForm(ModelForm):
     class Meta:
         model = Payment
         fields = ['order', 'datePayment', 'amount']
+        widgets = {
+            'datePayment': DateInput()
+        }
         labels = {
             "order": "Number of order",
             "datePayment": "Date of payment",
@@ -241,7 +255,7 @@ class PaymentForm(ModelForm):
         self.helper.layout = Layout(
             Row(
                 Column('order', css_class='form-group col-md-2 mb-0'),
-                Column('datePayment', css_class='form-group col-md-2 mb-0'),
+                Column('datePayment', css_class='form-group col-md-2 mb-0', attrs=({'type': 'date'})),
                 Column('amount', css_class='form-group col-md-1 mb-0'),
                 Column(Submit('submit', '+ Add', css_class='btn btn-primary btn btn-succes mb-3 pr-4 pl-4'),
                        css_class="form-group col-md-3 mb-0 d-flex align-items-end"),

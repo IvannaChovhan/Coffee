@@ -24,10 +24,11 @@
       <div class="card-body">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-            <label>Upload a file</label>
+
+            <label class="mr-5 mb-4">Upload a file</label>
             <input type="file" name="file">
-            <p>ONLY accepts csv</p>
-            <button class="btn btn-primary btn-succes" type="submit">Upload</button>
+            <p>ONLY accepts .csv</p>
+            <button class="btn btn-primary btn-succes mt-3" type="submit">Upload</button>
         </form>
       </div>
     </div>
@@ -35,3 +36,6 @@
 </div>
 
 {% endblock body %}
+{% block script %}
+
+{% endblock script %}

@@ -389,7 +389,7 @@ def get_objects_and_pagination(request, model, form):
     for field in form:
         fields.append(str(field.label))
     model_list = model.objects.get_queryset().order_by('id').reverse()
-    paginator = Paginator(model_list, 10)
+    paginator = Paginator(model_list, 50)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     object_list = [obj.get_values() for obj in page_obj.object_list]

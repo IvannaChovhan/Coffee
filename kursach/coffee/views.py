@@ -1,5 +1,5 @@
 import json
-
+import plotly.express as px
 from django.http import HttpResponseRedirect, QueryDict, HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import AuthenticationForm
@@ -12,11 +12,20 @@ from django.apps import apps
 from django.urls import reverse
 
 from .forms import *
-import csv, io
+import csv
+import io
+import pandas as pd
 
 
 def index(request):
     if request.user.is_authenticated:
+        data_orders = get_data_frame_data(Order)
+        table_coffeeProduct = get_data_frame_data(CoffeeProduct)
+        table_buyers = get_data_frame_data(Buyer)
+        joined = data_orders.join(table_coffeeProduct, on=['coffeeProduct'])
+        joined = joined.join(table_buyers, on=['buyer'])
+        joined = joined.dropna()
+        joined.drop(['phoneNumberBuyer', 'Email'], axis=1, inplace=True)
         return render(request, 'coffee/index.html')
     else:
         return HttpResponseRedirect(reverse('coffee:login'))
@@ -764,3 +773,77 @@ def upload_csv_payment(request):
         'message': message
     }
     return render(request, template, context)
+
+
+def get_data_frame_data(Model):
+    return pd.DataFrame(Model.objects.all().values())
+
+def top_buyers_by_amount(data):
+    top_buyers_by_price = data[data['purchase'] == 'BUY'].groupby('nameBuyer')['price'] \
+        .sum().sort_values(ascending=False).head(10)
+    df = top_buyers_by_price.reset_index()
+    df.columns = ['Name', 'Amount']
+    fig = px.bar(data_frame=df, x='Name', y='Amount',
+                 color='Amount', title='Top-10 buyers by amount')
+    return fig
+
+
+def top_buyers_by_count(data):
+    top_buyers_by_count = data[data['purchase'] == 'BUY'].groupby('nameBuyer')['price'] \
+        .count().sort_values(ascending=False).head(10)
+    df = top_buyers_by_count.reset_index()
+    df.columns = ['Name', 'Count']
+    fig = px.bar(data_frame=df, x='Name', y='Count',
+                 color='Count', title='Top-10 buyers by count')
+    return fig
+
+
+def profit_by_months(data):
+    sell_buy = data
+    sell_buy['dateOrder'] = sell_buy['dateOrder'].apply(pd.to_datetime)
+    sell_buy = data.set_index('dateOrder')
+    Buy = sell_buy[sell_buy['purchase'] == 'BUY']
+    Sell = sell_buy[sell_buy['purchase'] == 'SELL']
+    Buy = Buy.groupby([lambda x: x.year, lambda x: x.month])['price'].sum()
+    Sell = Sell.groupby([lambda x: x.year, lambda x: x.month])['price'].sum()
+    res = Sell - Buy
+    res = res.reset_index()
+    res['date'] = res['level_0'].apply(lambda x: str(x) + '-') + res['level_1'].apply(str)
+    res.drop(['level_0', 'level_1'], axis=1, inplace=True)
+    res['date'] = res['date'].apply(pd.to_datetime)
+    df = res
+    df.columns = ['Amount', 'Date']
+    fig = px.line(data_frame=df, x='Date', y='Amount',
+                  title='Profit by month')
+    return fig
+
+
+def profit_by_months(data):
+    sell_buy = data
+    Buy = sell_buy[sell_buy['purchase'] == 'BUY']
+    Sell = sell_buy[sell_buy['purchase'] == 'SELL']
+    res = Sell.groupby('coffeeProduct')['price'].sum() - Buy.groupby('coffeeProduct')['price'].sum()
+    res = res.sort_values(ascending=False).head(10)
+    df = res.reset_index()
+    df.columns = ['coffeeProduct', 'Amount']
+    df['coffeeProduct'] = df['coffeeProduct'].apply(str)
+    fig = px.bar(data_frame=df, x='coffeeProduct', y='Amount',
+                 color='Amount', title='Top-10 most profit Coffee Products')
+    fig.update_layout(
+        xaxis=dict(type='category')
+    )
+    return fig
+
+
+def profit_by_harvest_year(data):
+    sell_buy = data
+    Buy = sell_buy[sell_buy['purchase'] == 'BUY']
+    Sell = sell_buy[sell_buy['purchase'] == 'SELL']
+    res = Sell.groupby('harvestYear')['price'].sum() - Buy.groupby('harvestYear')['price'].sum()
+    res = res.sort_values(ascending=False).head(10)
+    df = res.reset_index()
+    df.columns = ['harvestYear', 'Amount']
+    df['harvestYear'] = df['harvestYear'].apply(int)
+    fig = px.bar(data_frame=df, x='harvestYear', y='Amount',
+                 color='Amount', title='Profit by Harvest Year')
+    return fig

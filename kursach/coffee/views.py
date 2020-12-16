@@ -463,15 +463,15 @@ def upload_csv_countries(request):
 
     if not csv_file.name.endswith('.csv'):
         message = "This is not csv file"
+    else:
+        data_set = csv_file.read().decode('UTF-8')
+        io_string = io.StringIO(data_set)
 
-    data_set = csv_file.read().decode('UTF-8')
-    io_string = io.StringIO(data_set)
-
-    next(io_string)
-    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
-        _, created = Country.objects.update_or_create(
-            nameCountry=column[0]
-        )
+        next(io_string)
+        for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+            _, created = Country.objects.update_or_create(
+                nameCountry=column[0]
+            )
 
     context = {
         'title': title,
@@ -496,15 +496,15 @@ def upload_csv_coffeetypes(request):
 
     if not csv_file.name.endswith('.csv'):
         message = "This is not csv file"
+    else:
+        data_set = csv_file.read().decode('UTF-8')
+        io_string = io.StringIO(data_set)
 
-    data_set = csv_file.read().decode('UTF-8')
-    io_string = io.StringIO(data_set)
-
-    next(io_string)
-    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
-        _, created = CoffeeType.objects.update_or_create(
-            nameCoffeeType=column[0]
-        )
+        next(io_string)
+        for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+            _, created = CoffeeType.objects.update_or_create(
+                nameCoffeeType=column[0]
+            )
 
     context = {
         'title': title,
@@ -529,17 +529,17 @@ def upload_csv_buyer(request):
 
     if not csv_file.name.endswith('.csv'):
         message = "This is not csv file"
+    else:
+        data_set = csv_file.read().decode('UTF-8')
+        io_string = io.StringIO(data_set)
 
-    data_set = csv_file.read().decode('UTF-8')
-    io_string = io.StringIO(data_set)
-
-    next(io_string)
-    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
-        _, created = Buyer.objects.update_or_create(
-            nameBuyer=column[0],
-            phoneNumberBuyer=column[1],
-            emailBuyer=column[2]
-        )
+        next(io_string)
+        for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+            _, created = Buyer.objects.update_or_create(
+                nameBuyer=column[0],
+                phoneNumberBuyer=column[1],
+                emailBuyer=column[2]
+            )
 
     context = {
         'title': title,
@@ -564,17 +564,17 @@ def upload_csv_owner(request):
 
     if not csv_file.name.endswith('.csv'):
         message = "This is not csv file"
+    else:
+        data_set = csv_file.read().decode('UTF-8')
+        io_string = io.StringIO(data_set)
 
-    data_set = csv_file.read().decode('UTF-8')
-    io_string = io.StringIO(data_set)
-
-    next(io_string)
-    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
-        _, created = Owner.objects.update_or_create(
-            nameOwner=column[0],
-            phoneNumberOwner=column[1],
-            emailOwner=column[2]
-        )
+        next(io_string)
+        for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+            _, created = Owner.objects.update_or_create(
+                nameOwner=column[0],
+                phoneNumberOwner=column[1],
+                emailOwner=column[2]
+            )
 
     context = {
         'title': title,
@@ -599,17 +599,17 @@ def upload_csv_farm(request):
 
     if not csv_file.name.endswith('.csv'):
         message = "This is not csv file"
+    else:
+        data_set = csv_file.read().decode('UTF-8')
+        io_string = io.StringIO(data_set)
 
-    data_set = csv_file.read().decode('UTF-8')
-    io_string = io.StringIO(data_set)
-
-    next(io_string)
-    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
-        _, created = Farm.objects.update_or_create(
-            nameFarm=column[0],
-            ownerFarm=Owner.objects.get(id=int(column[1])),
-            countryFarm=Country.objects.get(id=int(column[2]))
-        )
+        next(io_string)
+        for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+            _, created = Farm.objects.update_or_create(
+                nameFarm=column[0],
+                ownerFarm=Owner.objects.get(id=int(column[1])),
+                countryFarm=Country.objects.get(id=int(column[2]))
+            )
 
     context = {
         'title': title,
@@ -634,21 +634,21 @@ def upload_csv_coffee_product(request):
 
     if not csv_file.name.endswith('.csv'):
         message = "This is not csv file"
+    else:
+        data_set = csv_file.read().decode('UTF-8')
+        io_string = io.StringIO(data_set)
 
-    data_set = csv_file.read().decode('UTF-8')
-    io_string = io.StringIO(data_set)
-
-    next(io_string)
-    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
-        _, created = CoffeeProduct.objects.update_or_create(
-            coffeeType=CoffeeType.objects.get(id=column[0]),
-            harvestYear=column[1],
-            farm=Farm.objects.get(id=column[2]),
-            aroma=column[3],
-            aftertaste=column[4],
-            flavor=column[5],
-            color=column[6]
-        )
+        next(io_string)
+        for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+            _, created = CoffeeProduct.objects.update_or_create(
+                coffeeType=CoffeeType.objects.get(id=column[0]),
+                harvestYear=column[1],
+                farm=Farm.objects.get(id=column[2]),
+                aroma=column[3],
+                aftertaste=column[4],
+                flavor=column[5],
+                color=column[6]
+            )
 
     context = {
         'title': title,
@@ -673,18 +673,18 @@ def upload_csv_certificate(request):
 
     if not csv_file.name.endswith('.csv'):
         message = "This is not csv file"
+    else:
+        data_set = csv_file.read().decode('UTF-8')
+        io_string = io.StringIO(data_set)
 
-    data_set = csv_file.read().decode('UTF-8')
-    io_string = io.StringIO(data_set)
-
-    next(io_string)
-    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
-        _, created = Certificate.objects.update_or_create(
-            body=column[0],
-            product=CoffeeProduct(id=column[1]),
-            dateOfExpire=column[2],
-            disadvantages=column[3]
-        )
+        next(io_string)
+        for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+            _, created = Certificate.objects.update_or_create(
+                body=column[0],
+                product=CoffeeProduct(id=column[1]),
+                dateOfExpire=column[2],
+                disadvantages=column[3]
+            )
 
     context = {
         'title': title,
@@ -709,20 +709,20 @@ def upload_csv_order(request):
 
     if not csv_file.name.endswith('.csv'):
         message = "This is not csv file"
+    else:
+        data_set = csv_file.read().decode('UTF-8')
+        io_string = io.StringIO(data_set)
 
-    data_set = csv_file.read().decode('UTF-8')
-    io_string = io.StringIO(data_set)
-
-    next(io_string)
-    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
-        _, created = Order.objects.update_or_create(
-            coffeeProduct=CoffeeProduct.objects.get(id=column[0]),
-            weight=column[1],
-            price=column[2],
-            dateOrder=column[3],
-            buyer=Buyer.objects.get(id=column[4]),
-            purchase=column[5]
-        )
+        next(io_string)
+        for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+            _, created = Order.objects.update_or_create(
+                coffeeProduct=CoffeeProduct.objects.get(id=column[0]),
+                weight=column[1],
+                price=column[2],
+                dateOrder=column[3],
+                buyer=Buyer.objects.get(id=column[4]),
+                purchase=column[5]
+            )
 
     context = {
         'title': title,
@@ -747,17 +747,17 @@ def upload_csv_payment(request):
 
     if not csv_file.name.endswith('.csv'):
         message = "This is not csv file"
+    else:
+        data_set = csv_file.read().decode('UTF-8')
+        io_string = io.StringIO(data_set)
 
-    data_set = csv_file.read().decode('UTF-8')
-    io_string = io.StringIO(data_set)
-
-    next(io_string)
-    for column in csv.reader(io_string, delimiter=',', quotechar='|'):
-        _, created = Payment.objects.update_or_create(
-            order=Order.objects.get(id=column[0]),
-            datePayment=column[1],
-            amount=column[2]
-        )
+        next(io_string)
+        for column in csv.reader(io_string, delimiter=',', quotechar='|'):
+            _, created = Payment.objects.update_or_create(
+                order=Order.objects.get(id=column[0]),
+                datePayment=column[1],
+                amount=column[2]
+            )
 
     context = {
         'title': title,

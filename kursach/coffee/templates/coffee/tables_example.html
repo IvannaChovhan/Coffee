@@ -15,9 +15,8 @@
 
 {% block body %}
 
-<p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
-                        For more information about DataTables, please visit the <a target="_blank"
-                            href="https://datatables.net">official DataTables documentation</a>.</p>
+<p class="mb-4">Here you can add, update or delete data from datatable. Also you can upload your data from .csv<br>
+                Warning: if you want to upload data from .csv, it will be replaced</p>
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
@@ -38,6 +37,11 @@
           {% csrf_token %}
           {% crispy form %}
         </form>
+        <div class="row">
+            <div class="col-md-2">
+                <a class="btn btn-warning" href={% url link_upload %}>Upload csv</a>
+            </div>
+        </div>
 
         <div class="table-responsive mt-4">
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

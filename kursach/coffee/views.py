@@ -78,7 +78,8 @@ def table_countries_page(request):
         'page_obj': page_obj,
         'fields': fields,
         'object_list': object_list,
-        'model': 'Country'
+        'model': 'Country',
+        'link_upload': 'coffee:upload_csv_countries'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -114,7 +115,9 @@ def table_coffeeType_page(request):
         'page_obj': page_obj,
         'fields': fields,
         'object_list': object_list,
-        'model': 'CoffeeType'
+        'model': 'CoffeeType',
+        'link_upload': 'coffee:upload_csv_coffeetypes'
+
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -150,7 +153,8 @@ def table_buyer_page(request):
         'page_obj': page_obj,
         'fields': fields,
         'object_list': object_list,
-        'model': 'Buyer'
+        'model': 'Buyer',
+        'link_upload': 'coffee:upload_csv_buyer'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -184,7 +188,8 @@ def table_owner_page(request):
         'message': message,
         'page_obj': page_obj,
         'fields': fields,
-        'model': 'Owner'
+        'model': 'Owner',
+        'link_upload': 'coffee:upload_csv_owner'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -220,7 +225,8 @@ def table_farm_page(request):
         'page_obj': page_obj,
         'fields': fields,
         'object_list': object_list,
-        'model': 'Farm'
+        'model': 'Farm',
+        'link_upload': 'coffee:upload_csv_farm'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -256,7 +262,8 @@ def table_coffeeProducts_page(request):
         'page_obj': page_obj,
         'fields': fields,
         'object_list': object_list,
-        'model': 'CoffeeProduct'
+        'model': 'CoffeeProduct',
+        'link_upload': 'coffee:upload_csv_coffee_product'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -291,7 +298,8 @@ def table_certificate_page(request):
         'page_obj': page_obj,
         'fields': fields,
         'object_list': object_list,
-        'model': 'Certificate'
+        'model': 'Certificate',
+        'link_upload': 'coffee:upload_csv_certificate'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -327,7 +335,8 @@ def table_order_page(request):
         'page_obj': page_obj,
         'fields': fields,
         'object_list': object_list,
-        'model': 'Order'
+        'model': 'Order',
+        'link_upload': 'coffee:upload_csv_order'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -363,7 +372,8 @@ def table_payment_page(request):
         'page_obj': page_obj,
         'fields': fields,
         'object_list': object_list,
-        'model': 'Payment'
+        'model': 'Payment',
+        'link_upload': 'coffee:upload_csv_payment'
     }
     return render(request, 'coffee/tables_example.html', context)
 
@@ -441,7 +451,7 @@ def update_row(request, model, id):
 def upload_csv_countries(request):
     template = 'coffee/upload_file.html'
     message = ''
-    title = 'upload csv Countries'
+    title = 'Upload csv for countries'
     if request.method == "GET":
         context = {
             'title': title,
@@ -474,7 +484,7 @@ def upload_csv_countries(request):
 def upload_csv_coffeetypes(request):
     template = 'coffee/upload_file.html'
     message = ''
-    title = 'upload csv Coffee types'
+    title = 'Upload csv for coffee types'
     if request.method == "GET":
         context = {
             'title': title,
@@ -507,7 +517,7 @@ def upload_csv_coffeetypes(request):
 def upload_csv_buyer(request):
     template = 'coffee/upload_file.html'
     message = ''
-    title = 'upload csv Buyers'
+    title = 'Upload csv for buyers'
     if request.method == "GET":
         context = {
             'title': title,
@@ -542,7 +552,7 @@ def upload_csv_buyer(request):
 def upload_csv_owner(request):
     template = 'coffee/upload_file.html'
     message = ''
-    title = 'upload csv Owner'
+    title = 'Upload csv for owners'
     if request.method == "GET":
         context = {
             'title': title,
@@ -560,7 +570,7 @@ def upload_csv_owner(request):
 
     next(io_string)
     for column in csv.reader(io_string, delimiter=',', quotechar='|'):
-        _, created = Buyer.objects.update_or_create(
+        _, created = Owner.objects.update_or_create(
             nameOwner=column[0],
             phoneNumberOwner=column[1],
             emailOwner=column[2]
@@ -577,7 +587,7 @@ def upload_csv_owner(request):
 def upload_csv_farm(request):
     template = 'coffee/upload_file.html'
     message = ''
-    title = 'upload csv Farm'
+    title = 'Upload csv for farms'
     if request.method == "GET":
         context = {
             'title': title,
@@ -597,8 +607,8 @@ def upload_csv_farm(request):
     for column in csv.reader(io_string, delimiter=',', quotechar='|'):
         _, created = Farm.objects.update_or_create(
             nameFarm=column[0],
-            ownerFarm=Owner(id=column[1]),
-            countryFarm=Country(id=column[2])
+            ownerFarm=Owner.objects.get(id=int(column[1])),
+            countryFarm=Country.objects.get(id=int(column[2]))
         )
 
     context = {
@@ -612,7 +622,7 @@ def upload_csv_farm(request):
 def upload_csv_coffee_product(request):
     template = 'coffee/upload_file.html'
     message = ''
-    title = 'upload csv Coffee Product'
+    title = 'Upload csv for coffee products'
     if request.method == "GET":
         context = {
             'title': title,
@@ -631,9 +641,9 @@ def upload_csv_coffee_product(request):
     next(io_string)
     for column in csv.reader(io_string, delimiter=',', quotechar='|'):
         _, created = CoffeeProduct.objects.update_or_create(
-            coffeeType=CoffeeType(id=column[0]),
+            coffeeType=CoffeeType.objects.get(id=column[0]),
             harvestYear=column[1],
-            farm=Farm(id=column[2]),
+            farm=Farm.objects.get(id=column[2]),
             aroma=column[3],
             aftertaste=column[4],
             flavor=column[5],
@@ -651,7 +661,7 @@ def upload_csv_coffee_product(request):
 def upload_csv_certificate(request):
     template = 'coffee/upload_file.html'
     message = ''
-    title = 'upload csv Certificate'
+    title = 'Upload csv for certificates'
     if request.method == "GET":
         context = {
             'title': title,
@@ -687,7 +697,7 @@ def upload_csv_certificate(request):
 def upload_csv_order(request):
     template = 'coffee/upload_file.html'
     message = ''
-    title = 'upload csv Order'
+    title = 'Upload csv for orders'
     if request.method == "GET":
         context = {
             'title': title,
@@ -706,11 +716,11 @@ def upload_csv_order(request):
     next(io_string)
     for column in csv.reader(io_string, delimiter=',', quotechar='|'):
         _, created = Order.objects.update_or_create(
-            coffeeProduct=CoffeeProduct(id=column[0]),
+            coffeeProduct=CoffeeProduct.objects.get(id=column[0]),
             weight=column[1],
             price=column[2],
             dateOrder=column[3],
-            buyer=Buyer(id=column[4]),
+            buyer=Buyer.objects.get(id=column[4]),
             purchase=column[5]
         )
 
@@ -725,7 +735,7 @@ def upload_csv_order(request):
 def upload_csv_payment(request):
     template = 'coffee/upload_file.html'
     message = ''
-    title = 'upload csv Payment'
+    title = 'Upload csv for payments'
     if request.method == "GET":
         context = {
             'title': title,
@@ -744,7 +754,7 @@ def upload_csv_payment(request):
     next(io_string)
     for column in csv.reader(io_string, delimiter=',', quotechar='|'):
         _, created = Payment.objects.update_or_create(
-            order=Order(id=column[0]),
+            order=Order.objects.get(id=column[0]),
             datePayment=column[1],
             amount=column[2]
         )

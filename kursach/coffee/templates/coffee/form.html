@@ -1,0 +1,36 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block title %}Hi bootstrap{% endblock title %}
+
+
+
+{% block styles %}
+
+
+{% endblock styles%}
+
+{% block heading %}{{title}} {% endblock heading %}
+
+{% block body %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">DataTables Example</h6>
+    </div>
+    <div class="card-body">
+        {% if message %}
+            <div class="alert-success success_message col-md-3 mb-4">
+                <span>{{ message }}</span>
+            </div>
+
+        {% endif %}
+        <form method="post">
+          {% csrf_token %}
+          {% crispy form %}
+        </form>
+    </div>
+</div>
+
+
+{% endblock body %}

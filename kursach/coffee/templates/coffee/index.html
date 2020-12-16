@@ -10,7 +10,7 @@
 
 {% endblock styles%}
 
-{% block heading %}Welcome to boottsrap admin theme {% endblock heading %}
+{% block heading %}Dashboard{% endblock heading %}
 
 {% block body %}
 
@@ -21,7 +21,7 @@
       <div class="card-body">
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Orders done</div>
+            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Orders</div>
             <div class="h5 mb-0 font-weight-bold text-gray-800">{{total_orders}}</div>
           </div>
           <div class="col-auto">
@@ -39,45 +39,105 @@
       <div class="card-body">
         <div class="row no-gutters align-items-center">
           <div class="col mr-2">
-            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Sum of orders for last 30 days</div>
-            <div class="h5 mb-0 font-weight-bold text-gray-800">{{monthProfit}}</div>
+            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">EARNINGS (last 30 days)</div>
+            <div class="h5 mb-0 font-weight-bold text-gray-800">${{monthProfit}}</div>
           </div>
           <div class="col-auto">
-            <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+            <i class="fas fa-calendar fa-2x text-gray-300"></i>
           </div>
         </div>
       </div>
     </div>
 
-</div>
+  </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">EARNINGS (ANNUAL)</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">${{yearProfit}}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Customers</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">{{total_buyers}}</div>
+              </div>
+              <div class="col-auto">
+                <i class="fas fa-user fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </div>
 </div>
 
 
 <div class="row">
 
-  <div class="col-lg-6">
-
-    <!-- Default Card Example -->
-    <div class="card mb-4">
-      <div class="card-header">
-        Default Card Example
-      </div>
-      <div class="card-body">
-        This card uses Bootstrap's default styling with no utility classes added. Global styles are the only things modifying the look and feel of this default card example.
-      </div>
-    </div>
-
+  <div class="col-lg-8">
     <!-- Basic Card Example -->
     <div class="card shadow mb-4">
       <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Basic Card Example</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Monthly profit overview</h6>
       </div>
       <div class="card-body">
-        The styling for this basic card example is created by using default Bootstrap utility classes. By using utility classes, the style of the card component can be easily modified with no need for any custom CSS!
+        {{ graphs.profitMonths | safe }}
       </div>
     </div>
-
   </div>
+  <div class="col-lg-4">
+    <!-- Basic Card Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Coffee types in orders</h6>
+      </div>
+      <div class="card-body">
+        {{ graphs.pieCoffeeTypes | safe }}
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<div class="row">
+
+  <div class="col-lg-6">
+    <!-- Basic Card Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Products profit overview</h6>
+      </div>
+      <div class="card-body">
+        {{ graphs.profitProducts | safe }}
+      </div>
+    </div>
+  </div>
+    <div class="col-lg-6">
+        <!-- Basic Card Example -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Buyers profit overview</h6>
+          </div>
+          <div class="card-body">
+            {{ graphs.top_buyers | safe }}
+          </div>
+        </div>
+      </div>
 
 </div>
 

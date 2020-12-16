@@ -17,16 +17,27 @@ import csv
 import io
 import pandas as pd
 
+
 def get_data_frame_data(Model):
     return pd.DataFrame(Model.objects.all().values())
+
 
 def top_buyers_by_amount(data):
     top_buyers_by_price = data[data['purchase'] == 'BUY'].groupby('nameBuyer')['price'] \
         .sum().sort_values(ascending=False).head(10)
     df = top_buyers_by_price.reset_index()
     df.columns = ['Name', 'Amount']
-    fig = px.bar(data_frame=df, x='Name', y='Amount',
-                 color='Amount', title='Top-10 buyers by amount')
+    fig = px.bar(data_frame=df, x='Amount', y='Name',
+                 color='Amount',  orientation='h', color_discrete_sequence=px.colors.sequential.Viridis)
+    fig.update_traces(hovertemplate='%{y}<br>$%{x}')
+    fig.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        yaxis_title='',
+        xaxis_title='',
+        showlegend=False,
+        template='plotly_white'
+    )
     return py.plot(fig, output_type='div')
 
 
@@ -37,6 +48,35 @@ def top_buyers_by_count(data):
     df.columns = ['Name', 'Count']
     fig = px.bar(data_frame=df, x='Name', y='Count',
                  color='Count', title='Top-10 buyers by count')
+    fig.update_traces(hovertemplate='%{x}<br>$%{y}')
+    fig.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        yaxis_title='',
+        xaxis_title='',
+        showlegend=False,
+        template='plotly_white'
+    )
+    return py.plot(fig, output_type='div')
+
+
+def count_coffeeTypes_in_orders(data):
+    data_coffeeTypes = get_data_frame_data(CoffeeType).set_index('id')
+    coffeTypesByOrders = data.join(data_coffeeTypes, on=['coffeeType_id'])[['nameCoffeeType', 'purchase']]
+    # print(coffeTypesByOrders.columns)
+    coffeTypesByOrders = coffeTypesByOrders[coffeTypesByOrders['purchase'] == 'BUY'].groupby('nameCoffeeType')[
+        'nameCoffeeType'] \
+        .count().sort_values(ascending=False)
+    coffeTypesByOrders.index.names = ['index']
+    df = coffeTypesByOrders.reset_index()
+    df.columns = ['Name', 'Count']
+    fig = px.pie(df, values='Count', names='Name', color_discrete_sequence=['#4e73df', '#36b9cc'],
+                 template='plotly_white')
+    fig.update_traces(hole=.6, hovertemplate='%{label}: %{value}')
+    fig.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+    )
     return py.plot(fig, output_type='div')
 
 
@@ -55,25 +95,48 @@ def profit_by_months(data):
     res['date'] = res['date'].apply(pd.to_datetime)
     df = res
     df.columns = ['Amount', 'Date']
-    fig = px.line(data_frame=df, x='Date', y='Amount',
-                  title='Profit by month')
-    return py.plot(fig, output_type='div')
+    annualProfit = df['Amount'].sum()
+    fig = px.area(data_frame=df, x='Date', y='Amount')
+    fig.update_traces(hovertemplate='%{x}<br>$%{y}')
+    fig.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        yaxis_title='',
+        xaxis_title='',
+        showlegend=False,
+        template='plotly_white'
+
+    )
+    return py.plot(fig, output_type='div'), annualProfit
 
 
 def get_month_profit(data):
     sell_buy = data
     sell_buy['dateOrder'] = sell_buy['dateOrder'].apply(pd.to_datetime)
     sell_buy = data.set_index('dateOrder')
+    Buy = sell_buy[sell_buy['purchase'] == 'BUY']
     Sell = sell_buy[sell_buy['purchase'] == 'SELL']
+    Buy = Buy.groupby([lambda x: x.year, lambda x: x.month, lambda x: x.day])['price'].sum()
     Sell = Sell.groupby([lambda x: x.year, lambda x: x.month, lambda x: x.day])['price'].sum()
+    # print(res)
     Sell = Sell.reset_index()
-    Sell['date'] = Sell['level_0'].apply(lambda x: str(x) + '-') + Sell['level_1'].apply(lambda x: str(x) + '-') + Sell['level_2'].apply(str)
+    Buy = Buy.reset_index()
+    Sell['date'] = Sell['level_0'].apply(lambda x: str(x) + '-') + Sell['level_1'].apply(lambda x: str(x) + '-') + Sell[
+        'level_2'].apply(str)
     Sell.drop(['level_0', 'level_1', 'level_2'], axis=1, inplace=True)
     Sell['date'] = Sell['date'].apply(pd.to_datetime)
     dateEnd = pd.to_datetime("now")
     dateStart = dateEnd.floor('d') - pd.offsets.Day(30)
     value = Sell.loc[(Sell.date >= dateStart) & (Sell.date <= dateEnd), 'price'].sum()
-    return value
+
+    Buy['date'] = Buy['level_0'].apply(lambda x: str(x) + '-') + Buy['level_1'].apply(lambda x: str(x) + '-') + Buy[
+        'level_2'].apply(str)
+    Buy.drop(['level_0', 'level_1', 'level_2'], axis=1, inplace=True)
+    Buy['date'] = Buy['date'].apply(pd.to_datetime)
+    value2 = Buy.loc[(Buy.date >= dateStart) & (Buy.date <= dateEnd), 'price'].sum()
+
+    return value - value2
+
 
 def top_products(data):
     sell_buy = data
@@ -85,9 +148,16 @@ def top_products(data):
     df.columns = ['coffeeProduct', 'Amount']
     df['coffeeProduct'] = df['coffeeProduct'].apply(str)
     fig = px.bar(data_frame=df, x='coffeeProduct', y='Amount',
-                 color='Amount', title='Top-10 most profit Coffee Products')
+                 color='Amount', color_discrete_sequence=px.colors.sequential.Tealgrn)
+    fig.update_traces(hovertemplate='Id: %{x}<br>$%{y}')
     fig.update_layout(
-        xaxis=dict(type='category')
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        xaxis=dict(type='category'),
+        yaxis_title='',
+        xaxis_title='',
+        showlegend=False,
+        template='plotly_white'
     )
     return py.plot(fig, output_type='div')
 
@@ -105,13 +175,16 @@ def profit_by_harvest_year(data):
                  color='Amount', title='Profit by Harvest Year')
     return py.plot(fig, output_type='div')
 
+
 def index(request):
     if request.user.is_authenticated:
         data_orders = get_data_frame_data(Order)
         total_orders = len(data_orders[data_orders['purchase'] == 'SELL'])
 
         table_coffeeProduct = get_data_frame_data(CoffeeProduct).set_index('id')
+
         table_buyers = get_data_frame_data(Buyer).set_index('id')
+        total_buyers = len(table_buyers)
 
         joined = data_orders.join(table_coffeeProduct, on=['coffeeProduct_id'])
         joined = joined.join(table_buyers, on=['buyer_id'])
@@ -119,16 +192,18 @@ def index(request):
 
         joined.drop(['phoneNumberBuyer', 'emailBuyer'], axis=1, inplace=True)
         monthProfit = get_month_profit(joined)
-        profitMonths = profit_by_months(joined)
-        profitProducts = top_products(joined)
-        top_buyers = top_buyers_by_amount(joined)
-        graphs = {'profitMonths': profitMonths,
-                  'profitProducts': profitProducts,
-                  'top_buyers': top_buyers}
+        monthProfitGraph, yearProfit = profit_by_months(joined)
+        graphs = {'profitMonths': monthProfitGraph,
+                  'profitProducts': top_products(joined),
+                  'top_buyers': top_buyers_by_amount(joined),
+                  'pieCoffeeTypes': count_coffeeTypes_in_orders(joined)
+                  }
 
         context = {'graphs': graphs,
                    'total_orders': total_orders,
-                   'monthProfit': monthProfit}
+                   'monthProfit': monthProfit,
+                   'yearProfit': yearProfit,
+                   'total_buyers': total_buyers}
         return render(request, 'coffee/index.html', context)
     else:
         return HttpResponseRedirect(reverse('coffee:login'))
@@ -140,7 +215,7 @@ def login_view(request):
     if request.method == 'POST':
         user = authenticate(request, username=request.POST.get('username'), password=request.POST.get('password'))
         if user is not None:
-        # A backend authenticated the credentials
+            # A backend authenticated the credentials
             login(request, user)
             return redirect('coffee:home')
         else:
@@ -319,7 +394,7 @@ def table_farm_page(request):
             else:
                 request.session['message'] = 'This row already exists'
             return HttpResponseRedirect(reverse('coffee:table_farms'))
-            #return HttpResponseRedirect(reverse('coffee:form_owner'))
+            # return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
                 error[field] = form.errors[field].as_text()
@@ -356,7 +431,7 @@ def table_coffeeProducts_page(request):
             else:
                 request.session['message'] = 'This row already exists'
             return HttpResponseRedirect(reverse('coffee:table_coffeeProducts'))
-            #return HttpResponseRedirect(reverse('coffee:form_owner'))
+            # return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
                 error[field] = form.errors[field].as_text()
@@ -393,7 +468,7 @@ def table_certificate_page(request):
             else:
                 request.session['message'] = 'This row already exists'
             return HttpResponseRedirect(reverse('coffee:table_certificates'))
-            #return HttpResponseRedirect(reverse('coffee:form_owner'))
+            # return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
                 error[field] = form.errors[field].as_text()
@@ -429,7 +504,7 @@ def table_order_page(request):
             else:
                 request.session['message'] = 'This row already exists'
             return HttpResponseRedirect(reverse('coffee:table_orders'))
-            #return HttpResponseRedirect(reverse('coffee:form_owner'))
+            # return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
                 error[field] = form.errors[field].as_text()
@@ -466,7 +541,7 @@ def table_payment_page(request):
             else:
                 request.session['message'] = 'This row already exists'
             return HttpResponseRedirect(reverse('coffee:table_payments'))
-            #return HttpResponseRedirect(reverse('coffee:form_owner'))
+            # return HttpResponseRedirect(reverse('coffee:form_owner'))
         else:
             for field in form.errors:
                 error[field] = form.errors[field].as_text()
@@ -880,5 +955,3 @@ def upload_csv_payment(request):
         'message': message
     }
     return render(request, template, context)
-
-

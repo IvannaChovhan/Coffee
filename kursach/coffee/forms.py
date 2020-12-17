@@ -13,16 +13,9 @@ class DateInput(forms.DateInput):
 
 
 class DateForm(forms.Form):
-    class Meta:
-        fields = ['date_begin', 'date_end']
-        widgets = {
-            'date_begin': DateInput(),
-            'date_end': DateInput()
-        }
-        labels = {
-            "date_begin": "From",
-            "date_end": "To",
-        }
+
+    date_begin = forms.DateField(widget=DateInput(attrs={'class': 'form-control'}), label='From')
+    date_end = forms.DateField(widget=DateInput(attrs={'class': 'form-control'}), label='To')
 
     def __init__(self, *args, **kwargs):
         super(DateForm, self).__init__(*args, **kwargs)

@@ -11,6 +11,34 @@ from .models import *
 class DateInput(forms.DateInput):
     input_type = 'date'
 
+
+class DateForm(forms.Form):
+    class Meta:
+        fields = ['date_begin', 'date_end']
+        widgets = {
+            'date_begin': DateInput(),
+            'date_end': DateInput()
+        }
+        labels = {
+            "date_begin": "From",
+            "date_end": "To",
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(DateForm, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Row(
+                Column('date_begin', css_class='form-group col-md-4 mb-0'),
+                Column('date_end', css_class='form-group col-md-4 mb-0'),
+                Column(Submit('submit', '+ Submit', css_class='btn btn-primary btn btn-succes mb-3 pr-4 pl-4'),
+                       css_class="form-group col-md-4 mb-0 d-flex align-items-end"),
+                css_class='form-row'
+            ),
+
+        )
+
+
 class CountryForm(ModelForm):
     class Meta:
         model = Country

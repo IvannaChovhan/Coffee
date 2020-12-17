@@ -955,3 +955,39 @@ def upload_csv_payment(request):
         'message': message
     }
     return render(request, template, context)
+
+
+@login_required()
+def report_order(request):
+    error = {}
+    message = ''
+    template = 'coffee/report.html'
+    if request.method == 'POST':
+        form = DateForm(request.POST)
+        if form.is_valid():
+            print(form)
+            # data_orders = get_data_frame_data(Order)
+            # data_orders['date'] = data_orders['date'].apply(pd.to_datetime)
+            # dateEnd = pd.to_datetime("now")
+            # dateStart = dateEnd.floor('d') - pd.offsets.Day(30)
+            # value = data_orders.loc[(Sell.date >= dateStart) & (Sell.date <= dateEnd), 'price'].sum()
+            # c, created = CoffeeProduct.objects.get_or_create(**form.cleaned_data)
+            # if created:
+            #     request.session['message'] = 'Added successful!'
+            # else:
+            #     request.session['message'] = 'This row already exists'
+            # return HttpResponseRedirect(reverse('coffee:table_coffeeProducts'))
+            # return HttpResponseRedirect(reverse('coffee:form_owner'))
+        else:
+            for field in form.errors:
+                error[field] = form.errors[field].as_text()
+
+    form = DateForm()
+
+    context = {
+        'title': 'Order report',
+        'form': form,
+        'errors': error,
+        'message': message
+    }
+    return render(request, template, context)

@@ -27,4 +27,5 @@ urlpatterns = [
     path('upload_csv_certificate', views.upload_csv_certificate, name='upload_csv_certificate'),
     path('upload_csv_order', views.upload_csv_order, name='upload_csv_order'),
     path('upload_csv_payment', views.upload_csv_payment, name='upload_csv_payment'),
+    path('report_order', views.report_order, name='report_order'),
 ]

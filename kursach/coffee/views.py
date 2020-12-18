@@ -28,7 +28,7 @@ def top_buyers_by_amount(data):
     df = top_buyers_by_price.reset_index()
     df.columns = ['Name', 'Amount']
     fig = px.bar(data_frame=df, x='Amount', y='Name',
-                 color='Amount',  orientation='h', color_discrete_sequence=px.colors.sequential.Viridis)
+                 color='Amount', orientation='h', color_discrete_sequence=px.colors.sequential.Viridis)
     fig.update_traces(hovertemplate='%{y}<br>$%{x}')
     fig.update_layout(
         paper_bgcolor='rgba(0,0,0,0)',
@@ -46,9 +46,9 @@ def top_buyers_by_count(data):
         .count().sort_values(ascending=False).head(10)
     df = top_buyers_by_count.reset_index()
     df.columns = ['Name', 'Count']
-    fig = px.bar(data_frame=df, x='Name', y='Count',
-                 color='Count', title='Top-10 buyers by count')
-    fig.update_traces(hovertemplate='%{x}<br>$%{y}')
+    fig = px.bar(data_frame=df, y='Name', x='Count', orientation='h',
+                 color_discrete_sequence=px.colors.sequential.Cividis, color='Name')
+    fig.update_traces(hovertemplate='%{y}<br>Count orders: %{x}')
     fig.update_layout(
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
@@ -64,7 +64,7 @@ def count_coffeeTypes_in_orders(data):
     data_coffeeTypes = get_data_frame_data(CoffeeType).set_index('id')
     coffeTypesByOrders = data.join(data_coffeeTypes, on=['coffeeType_id'])[['nameCoffeeType', 'purchase']]
     # print(coffeTypesByOrders.columns)
-    coffeTypesByOrders = coffeTypesByOrders[coffeTypesByOrders['purchase'] == 'BUY'].groupby('nameCoffeeType')[
+    coffeTypesByOrders = coffeTypesByOrders[coffeTypesByOrders['purchase'] == 'SELL'].groupby('nameCoffeeType')[
         'nameCoffeeType'] \
         .count().sort_values(ascending=False)
     coffeTypesByOrders.index.names = ['index']
@@ -97,7 +97,7 @@ def profit_by_months(data):
     df.columns = ['Amount', 'Date']
     annualProfit = df['Amount'].sum()
     fig = px.area(data_frame=df, x='Date', y='Amount')
-    fig.update_traces(hovertemplate='%{x}<br>$%{y}')
+    fig.update_traces(hovertemplate='%{x}<br>$%{y}', line_shape='spline')
     fig.update_layout(
         paper_bgcolor='rgba(0,0,0,0)',
         plot_bgcolor='rgba(0,0,0,0)',
@@ -171,8 +171,19 @@ def profit_by_harvest_year(data):
     df = res.reset_index()
     df.columns = ['harvestYear', 'Amount']
     df['harvestYear'] = df['harvestYear'].apply(int)
-    fig = px.bar(data_frame=df, x='harvestYear', y='Amount',
-                 color='Amount', title='Profit by Harvest Year')
+    df = df.sort_values('harvestYear')
+    print(df)
+    fig = px.line(x=df['harvestYear'], y=df['Amount'], color_discrete_sequence=px.colors.sequential.Viridis)
+    fig.update_traces(line_shape='spline',  mode='lines+markers', fill='tozeroy', hovertemplate='%{x}<br>$%{y}')
+    fig.update_layout(
+        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor='rgba(0,0,0,0)',
+        yaxis_title='',
+        xaxis_title='',
+        showlegend=False,
+        template='plotly_white'
+
+    )
     return py.plot(fig, output_type='div')
 
 
@@ -576,11 +587,8 @@ def get_objects_and_pagination(request, model, form):
     for field in form:
         fields.append(str(field.label))
     model_list = model.objects.get_queryset().order_by('id').reverse()
-    paginator = Paginator(model_list, 50)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    object_list = [obj.get_values() for obj in page_obj.object_list]
-    return fields, page_obj, object_list
+    object_list = [obj.get_values() for obj in model_list]
+    return fields, model_list, object_list
 
 
 def delete_row(request):
@@ -1071,6 +1079,33 @@ def report_buy(request):
         'flag': 'buy'
     }
     return render(request, template, context)
+
+
+@login_required()
+def charts_page(request):
+    data_orders = get_data_frame_data(Order)
+    table_coffeeProduct = get_data_frame_data(CoffeeProduct).set_index('id')
+    table_buyers = get_data_frame_data(Buyer).set_index('id')
+
+    joined = data_orders.join(table_coffeeProduct, on=['coffeeProduct_id'])
+    joined = joined.join(table_buyers, on=['buyer_id'])
+    joined = joined.dropna()
+
+    joined.drop(['phoneNumberBuyer', 'emailBuyer'], axis=1, inplace=True)
+
+    monthProfitGraph, yearProfit = profit_by_months(joined)
+
+    graphs = {'profitMonths': monthProfitGraph,
+              'profitProducts': top_products(joined),
+              'top_buyers': top_buyers_by_amount(joined),
+              'pieCoffeeTypes': count_coffeeTypes_in_orders(joined),
+              'topBuyersCountGraph': top_buyers_by_count(joined),
+              'profitHarvestYearGraph': profit_by_harvest_year(joined)
+              }
+
+    context = {'graphs': graphs}
+
+    return render(request, 'coffee/charts.html', context)
 
 
 @login_required()

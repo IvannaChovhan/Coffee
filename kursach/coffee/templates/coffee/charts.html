@@ -1,0 +1,92 @@
+{% extends 'layout/base.html' %}
+{% load static %}
+
+{% block title %}Coffee's majority{% endblock title %}
+
+
+
+{% block styles %}
+
+{% endblock styles%}
+
+{% block heading %}Charts{% endblock heading %}
+
+{% block body %}
+    <div class="row">
+
+  <div class="col-lg-8">
+    <!-- Basic Card Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Monthly profit overview</h6>
+      </div>
+      <div class="card-body">
+        {{ graphs.profitMonths | safe }}
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-4">
+    <!-- Basic Card Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Coffee types in orders</h6>
+      </div>
+      <div class="card-body">
+        {{ graphs.pieCoffeeTypes | safe }}
+      </div>
+    </div>
+  </div>
+
+
+</div>
+    <div class="row">
+
+  <div class="col-lg-6">
+    <!-- Basic Card Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Products profit overview</h6>
+      </div>
+      <div class="card-body">
+        {{ graphs.profitProducts | safe }}
+      </div>
+    </div>
+  </div>
+    <div class="col-lg-6">
+        <!-- Basic Card Example -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Buyers profit overview</h6>
+          </div>
+          <div class="card-body">
+            {{ graphs.top_buyers | safe }}
+          </div>
+        </div>
+      </div>
+
+</div>
+    <div class="row">
+        <div class="col-lg-5">
+        <!-- Basic Card Example -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Regular customers</h6>
+          </div>
+          <div class="card-body">
+            {{ graphs.topBuyersCountGraph | safe }}
+          </div>
+        </div>
+      </div>
+        <div class="col-lg-7">
+    <!-- Basic Card Example -->
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Profit by harvest year</h6>
+      </div>
+      <div class="card-body">
+        {{ graphs.profitHarvestYearGraph | safe }}
+      </div>
+    </div>
+  </div>
+    </div>
+{% endblock body %}

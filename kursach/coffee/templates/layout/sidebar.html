@@ -66,7 +66,9 @@
             <div class="bg-white py-2 collapse-inner rounded">
                 <h6 class="collapse-header">Main Reports:</h6>
                 <a class="collapse-item" href="{% url 'coffee:report_order' %}">Report Order</a>
-                <a class="collapse-item" href="#">Report 2</a>
+                <a class="collapse-item" href="{% url 'coffee:report_buy' %}">Report Buy</a>
+                <a class="collapse-item" href="{% url 'coffee:report_sell' %}">Report Sell</a>
+                <a class="collapse-item" href="{% url 'coffee:report_deptors' %}">Report Deptors</a>
             </div>
         </div>
     </li>

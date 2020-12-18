@@ -962,22 +962,20 @@ def report_order(request):
     error = {}
     message = ''
     template = 'coffee/report.html'
+    table = ''
+    date = []
     if request.method == 'POST':
         form = DateForm(request.POST)
         if form.is_valid():
-            print(form)
-            # data_orders = get_data_frame_data(Order)
-            # data_orders['date'] = data_orders['date'].apply(pd.to_datetime)
-            # dateEnd = pd.to_datetime("now")
-            # dateStart = dateEnd.floor('d') - pd.offsets.Day(30)
-            # value = data_orders.loc[(Sell.date >= dateStart) & (Sell.date <= dateEnd), 'price'].sum()
-            # c, created = CoffeeProduct.objects.get_or_create(**form.cleaned_data)
-            # if created:
-            #     request.session['message'] = 'Added successful!'
-            # else:
-            #     request.session['message'] = 'This row already exists'
-            # return HttpResponseRedirect(reverse('coffee:table_coffeeProducts'))
-            # return HttpResponseRedirect(reverse('coffee:form_owner'))
+            data_orders = get_data_frame_data(Order)
+            data_orders['dateOrder'] = data_orders['dateOrder'].apply(pd.to_datetime)
+            date_end = pd.to_datetime(form.cleaned_data.get('date_end'))
+            date_start = pd.to_datetime(form.cleaned_data.get('date_begin'))
+            date = [date_start.year, date_start.month, date_start.day, date_end.year, date_end.month, date_end.day]
+            print(date)
+            table = data_orders.loc[(data_orders['dateOrder'] >= date_start) & (data_orders['dateOrder'] <= date_end)]
+            table = table.sort_values(by=['dateOrder']).to_html(classes='table table-bordered', index=False)
+
         else:
             for field in form.errors:
                 error[field] = form.errors[field].as_text()
@@ -988,6 +986,151 @@ def report_order(request):
         'title': 'Order report',
         'form': form,
         'errors': error,
-        'message': message
+        'message': message,
+        'table': table,
+        'csv': True,
+        'date': date,
+        'flag': 'all'
     }
     return render(request, template, context)
+
+
+@login_required()
+def report_sell(request):
+    error = {}
+    message = ''
+    template = 'coffee/report.html'
+    table = ''
+    date = []
+    if request.method == 'POST':
+        form = DateForm(request.POST)
+        if form.is_valid():
+            data_orders = get_data_frame_data(Order)
+            data_orders['dateOrder'] = data_orders['dateOrder'].apply(pd.to_datetime)
+            data_orders = data_orders[data_orders['purchase'] == 'SELL']
+            date_end = pd.to_datetime(form.cleaned_data.get('date_end'))
+            date_start = pd.to_datetime(form.cleaned_data.get('date_begin'))
+            date = [date_start.year, date_start.month, date_start.day, date_end.year, date_end.month, date_end.day]
+            print(date)
+            table = data_orders.loc[(data_orders['dateOrder'] >= date_start) & (data_orders['dateOrder'] <= date_end)]
+            table = table.sort_values(by=['dateOrder']).to_html(classes='table table-bordered', index=False)
+
+        else:
+            for field in form.errors:
+                error[field] = form.errors[field].as_text()
+
+    form = DateForm()
+
+    context = {
+        'title': 'Sell report',
+        'form': form,
+        'errors': error,
+        'message': message,
+        'table': table,
+        'csv': True,
+        'date': date,
+        'flag': 'sell'
+    }
+    return render(request, template, context)
+
+
+@login_required()
+def report_buy(request):
+    error = {}
+    message = ''
+    template = 'coffee/report.html'
+    table = ''
+    date = []
+    if request.method == 'POST':
+        form = DateForm(request.POST)
+        if form.is_valid():
+            data_orders = get_data_frame_data(Order)
+            data_orders['dateOrder'] = data_orders['dateOrder'].apply(pd.to_datetime)
+            data_orders = data_orders[data_orders['purchase'] == 'BUY']
+            date_end = pd.to_datetime(form.cleaned_data.get('date_end'))
+            date_start = pd.to_datetime(form.cleaned_data.get('date_begin'))
+            date = [date_start.year, date_start.month, date_start.day, date_end.year, date_end.month, date_end.day]
+            print(date)
+            table = data_orders.loc[(data_orders['dateOrder'] >= date_start) & (data_orders['dateOrder'] <= date_end)]
+            table = table.sort_values(by=['dateOrder']).to_html(classes='table table-bordered', index=False)
+
+        else:
+            for field in form.errors:
+                error[field] = form.errors[field].as_text()
+
+    form = DateForm()
+
+    context = {
+        'title': 'Buy report',
+        'form': form,
+        'errors': error,
+        'message': message,
+        'table': table,
+        'csv': True,
+        'date': date,
+        'flag': 'buy'
+    }
+    return render(request, template, context)
+
+
+@login_required()
+def report_deptors(request):
+    template = 'coffee/report.html'
+
+    data_orders = get_data_frame_data(Order).set_index('id')
+
+    table_payments = get_data_frame_data(Payment).set_index('id')
+
+    table_buyers = get_data_frame_data(Buyer).set_index('id')
+
+    table_payments = table_payments.join(data_orders, on=['order_id'])
+    table_payments = table_payments[table_payments['purchase'] == 'BUY']
+    table_payments['diff'] = table_payments['price'] - table_payments['amount']
+    table_payments = table_payments[table_payments['diff'] > 0]
+    table_payments = table_payments.join(table_buyers, on=['buyer_id'])
+
+
+    context = {
+        'title': 'Deptors report',
+        'table': table_payments[['order_id', 'nameBuyer', 'diff']].to_html(classes='table table-bordered', index=False),
+        'csv': True
+    }
+    return render(request, template, context)
+
+
+@login_required()
+def export_csv(request, first_year, first_month, first_day, end_year, end_month, end_day, flag):
+    data_orders = get_data_frame_data(Order)
+    data_orders['dateOrder'] = data_orders['dateOrder'].apply(pd.to_datetime)
+    if flag == 'sell':
+        data_orders = data_orders[data_orders['purchase'] == 'SELL']
+    elif flag == 'buy':
+        data_orders = data_orders[data_orders['purchase'] == 'BUY']
+    date_start = pd.to_datetime(str(first_year) + '-' + str(first_month) + '-' + str(first_day))
+    date_end = pd.to_datetime(str(end_year) + '-' + str(end_month) + '-' + str(end_day))
+    table = data_orders.loc[(data_orders['dateOrder'] >= date_start) & (data_orders['dateOrder'] <= date_end)]
+    table = table.sort_values(by=['dateOrder'])
+    response = HttpResponse(table.to_csv(encoding='utf-8', index=False), content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="export.csv"'
+    return response
+
+
+@login_required()
+def export_csv_deptors(request):
+    data_orders = get_data_frame_data(Order).set_index('id')
+
+    table_payments = get_data_frame_data(Payment).set_index('id')
+
+    table_buyers = get_data_frame_data(Buyer).set_index('id')
+
+    table_payments = table_payments.join(data_orders, on=['order_id'])
+    table_payments = table_payments[table_payments['purchase'] == 'BUY']
+    table_payments['diff'] = table_payments['price'] - table_payments['amount']
+    table_payments = table_payments[table_payments['diff'] > 0]
+    table_payments = table_payments.join(table_buyers, on=['buyer_id'])
+
+    table = table_payments[['order_id', 'nameBuyer', 'diff']]
+
+    response = HttpResponse(table.to_csv(encoding='utf-8', index=False), content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="deptors.csv"'
+    return response

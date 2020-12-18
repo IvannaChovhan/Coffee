@@ -10,29 +10,53 @@
 {% block heading %} {{ title }} {% endblock heading %}
 
 {% block body %}
-
+{% if form %}
 <div class="row">
   <div class="col-lg-6">
     <!-- Basic Card Example -->
     <div class="card shadow mb-4">
-      <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">{{ title }}</h6>
+
+      <div class="card-body">
           {% if message %}
           <div class="p-2 m-1 alert-danger">
             <h6 class=" font-weight-bold text-danger">{{message}}</h6>
           </div>
           {% endif %}
-      </div>
-
-      <div class="card-body">
         <form method="post">
             {% csrf_token %}
             {% crispy form %}
         </form>
       </div>
+
     </div>
   </div>
 </div>
+{% endif %}
+{% if table %}
+  <div class="table-responsive mt-4">
+    {{ table|safe }}
+  </div>
+  {% if csv %}
+      {% if date %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'coffee:export_csv' first_year=date.0 first_month=date.1 first_day=date.2 end_year=date.3 end_month=date.4 end_day=date.5 flag=flag %}" class="btn download_file"><i class="fas fa-download"></i> Завантажити дані</a>
+                    </div>
+                </div>
+            </div>
+      {% else %}
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="d-flex justify-content-center">
+                        <a href="{% url 'coffee:export_csv_deptors'%}" class="btn download_file"><i class="fas fa-download"></i> Завантажити дані</a>
+                    </div>
+                </div>
+            </div>
+      {% endif %}
+
+  {% endif %}
+{% endif %}
 
 {% endblock body %}
 {% block script %}

@@ -224,7 +224,7 @@ class CertificateForm(ModelForm):
 class OrderForm(ModelForm):
     class Meta:
         model = Order
-        fields = ['coffeeProduct', 'weight', 'dateOrder', 'price', 'dateOrder', 'buyer', 'purchase']
+        fields = ['coffeeProduct', 'weight', 'price', 'dateOrder', 'buyer', 'purchase']
         widgets = {
             'dateOrder': DateInput()
         }

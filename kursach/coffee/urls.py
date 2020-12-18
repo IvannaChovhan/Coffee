@@ -28,4 +28,9 @@ urlpatterns = [
     path('upload_csv_order', views.upload_csv_order, name='upload_csv_order'),
     path('upload_csv_payment', views.upload_csv_payment, name='upload_csv_payment'),
     path('report_order', views.report_order, name='report_order'),
+    path('report_buy', views.report_buy, name='report_buy'),
+    path('report_sell', views.report_sell, name='report_sell'),
+    path('report_deptors', views.report_deptors, name='report_deptors'),
+    path('export_csv_deptors', views.export_csv_deptors, name='export_csv_deptors'),
+    path(r'<int:first_year>/<int:first_month>/<int:first_day>/<int:end_year>/<int:end_month>/<int:end_day>/<str:flag>/export_csv', views.export_csv, name='export_csv'),
 ]

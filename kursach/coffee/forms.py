@@ -28,7 +28,6 @@ class DateForm(forms.Form):
                        css_class="form-group col-md-4 mb-0 d-flex align-items-end"),
                 css_class='form-row'
             ),
-
         )
 
 
@@ -50,7 +49,6 @@ class CountryForm(ModelForm):
                        css_class="form-group col-md-3 mb-0 d-flex align-items-end"),
                 css_class='form-row'
             ),
-
         )
 
 
@@ -224,7 +222,7 @@ class CertificateForm(ModelForm):
 class OrderForm(ModelForm):
     class Meta:
         model = Order
-        fields = ['coffeeProduct', 'weight', 'dateOrder', 'price', 'dateOrder', 'buyer', 'purchase']
+        fields = ['coffeeProduct', 'weight',  'price', 'dateOrder', 'buyer', 'purchase']
         widgets = {
             'dateOrder': DateInput()
         }
@@ -232,8 +230,8 @@ class OrderForm(ModelForm):
         labels = {
             "coffeeProduct": "Coffee product",
             "weight": "Weight, kg",
-            "price": "Price, $",
             "dateOrder": "Date of order",
+            "price": "Price, $",
             "buyer": "Buyer",
             "purchase": "Purchase",
         }
